@@ -9,27 +9,6 @@
         -->
         <!-- Client game code -->
         <!-- <script type="module" src="./src/my_game/my_game.js"> </script> -->
-        <script type="x-shader/x-vertex" id="VertexShader">
-            // this is the vertex shader
-            // Expects one vertex position
-            // naming convention, attributes always begin with "a"
-            attribute vec3 aVertexPosition;
-
-            void main(void) {
-                // Convert the vec3 into vec4 for scan conversion and
-                // assign to gl_Position to pass vertex to the fragment shader
-                gl_Position = vec4(aVertexPosition, 1.0);
-            }
-        </script>
-        <script type="x-shader/x-fragment" id="FragmentShader">
-            // this is the fragment (or pixel) shader
-            void main(void) {
-                // for every pixel called (within the square) sets
-                // constant color white with alpha-channel value of 1.0
-                gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-            }
-            // End of fragment/pixel shader
-        </script>
         <script type="module">
             import MyGame from "./src/my_game/my_game.js";
             import MyHome from "./src/my_game/my_home.js";
