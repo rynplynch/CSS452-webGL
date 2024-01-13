@@ -1,0 +1,19 @@
+#+author: Ryan Lynch
+#+title: CSS452: 2D Game Engine Course
+
+
+* What is this repo?
+This repository outlines my journey as I move through the U.W. Bothell css452 course.
+
+All of the work done here follows the course repository found [[https://github.com/Apress/build-your-own-2d-game-engine-2e/tree/main][here]]
+
+My commits will be the incremental updates I make to my game engine as I follow along in the textbook.
+
+* Running
+To run, navigate to any of the mp<number> folders are run using the live-server command
+ex.
+#+begin_src bash
+live-server --open=index.html
+#+end_src
+
+mp1 will be a more basic implementation as appose to mp2
