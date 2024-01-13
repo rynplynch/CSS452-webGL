@@ -25,8 +25,9 @@ function clearCanvas(array){
 let mShader = null;
 function createShader() {
   mShader = new SimpleShader(
-    "VertexShader", // these are the ID's of the shaders in index.html
-    "FragmentShader"
+    // we feed in the file location of the shaders here
+    "src/glsl_shaders/simple_vs.glsl",
+    "src/glsl_shaders/simple_vs.glsl"
   );
 }
 
