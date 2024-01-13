@@ -27,7 +27,7 @@ function createShader() {
   mShader = new SimpleShader(
     // we feed in the file location of the shaders here
     "src/glsl_shaders/simple_vs.glsl",
-    "src/glsl_shaders/simple_vs.glsl"
+    "src/glsl_shaders/white_fs.glsl"
   );
 }
 
