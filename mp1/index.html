@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MP1: Warming up and WebGL Drawing Canvas</title>
+        <link rel ="icon" type ="image/x-icon" href="./favicon.png">
+
+        <!-- the following says there are javascript source code contained in 
+             the external source files
+        -->
+        <!-- core of the game engine -->
+        <!-- <script type="text/html"> -->
+        <script type="module">
+            // Some silent warnings are now thrown as errors.
+            // enforces optimization rules
+            "use strict";
+            import * as core from "./src/core.mjs";
+            
+
+            window.onload = function() {
+                core.initWebGL("GLCanvas");
+                core.clearCanvas([1, 0, 0, 1]);
+
+                core.initWebGL("SecCanvas");
+                core.clearCanvas([0, 0, 1, 1]);
+
+                core.initWebGL("ThirdCanvas");
+                core.clearCanvas([0, 1, 0, 1]);
+            }
+
+        </script>  
+    </head>
+
+    <body>
+        <canvas id="GLCanvas" width="640" height="480">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+        <br><b>The above is the first WebGL draw area!</b>
+
+        <br>
+    
+        <canvas id="SecCanvas" width="640" height="480">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+        <br><b>The above is the second WebGL draw area!</b>
+
+        <br>
+
+        <canvas id="ThirdCanvas" width="640" height="480">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+        <br><b>The above is the third WebGL draw area!</b>
+    </body>
+</html>
