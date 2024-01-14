@@ -15,7 +15,8 @@ class MyGame {
         // engine.clearCanvas([0.6, 0.6, 0.6, 1]);
         engine.clearCanvas([0, 1, 0, 1]);
 
-        engine.drawSquare();
+        // pass in the color for the square as an array
+        engine.drawSquare([1, 0, 0, 1]);
         let recY = 0.6;     // y-location of rectangles
         let triY = 0.0;     // y-location of triangles
         let cirY = -0.6;    // y-location of circles

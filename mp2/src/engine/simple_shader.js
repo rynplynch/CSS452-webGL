@@ -6,6 +6,7 @@ class SimpleShader {
   constructor(vertexShaderID, fragmentShaderID) {
     this.mCompiledShader = null;
     this.mVertexPositionRef = null;
+    this.mPixelColorRef = null;
 
     let mGL = core.getGL();
 
@@ -33,9 +34,16 @@ class SimpleShader {
     this.mVertexPositionRef = mGL.getAttribLocation(
       this.mCompiledShader,
       "aVertexPosition");
-    }
 
-  activate() {
+    // get the pointer for Uniform type
+    // set equal to our own pointer so we can reference it
+    this.mPixelColorRef = mGL.getUniformLocation(
+      this.mCompiledShader,
+      "uPixelColor"
+    );
+  }
+
+  activate(pixelColor) {
     let mGL = core.getGL();
 
     // specifiy the shader to use
@@ -52,7 +60,11 @@ class SimpleShader {
                             );
 
     mGL.enableVertexAttribArray(this.mVertexPositionRef);
-    }
+
+    // reference the uniform data type
+    // alter that reference with the passed in parameter
+    mGL.uniform4fv(this.mPixelColorRef, pixelColor);
+  }
 }
 
 function loadAndCompileShader(filePath, shaderType) {

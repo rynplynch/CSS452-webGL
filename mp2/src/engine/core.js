@@ -27,13 +27,13 @@ function createShader() {
   mShader = new SimpleShader(
     // we feed in the file location of the shaders here
     "src/glsl_shaders/simple_vs.glsl",
-    "src/glsl_shaders/white_fs.glsl"
+    "src/glsl_shaders/simple_fs.glsl"
   );
 }
 
-function drawSquare() {
+function drawSquare(color) {
   // activate shader
-  mShader.activate();
+  mShader.activate(color);
 
   mGL.drawArrays(mGL.TRIANGLE_STRIP, 0, 4);
 }
