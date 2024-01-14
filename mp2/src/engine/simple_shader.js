@@ -1,6 +1,6 @@
 "using strict";
-import * as core from "./core.js";
-import * as vertexBuffer from "./vertex_buffer.js";
+import * as glSys from "./core/gl.js";
+import * as vertexBuffer from "./core/vertex_buffer.js";
 
 class SimpleShader {
   constructor(vertexShaderID, fragmentShaderID) {
@@ -8,7 +8,7 @@ class SimpleShader {
     this.mVertexPositionRef = null;
     this.mPixelColorRef = null;
 
-    let mGL = core.getGL();
+    let mGL = glSys.get();
 
     // use or load an compile function to generate our shaders
     this.mVertexShader = loadAndCompileShader(vertexShaderID, mGL.VERTEX_SHADER);
@@ -44,7 +44,7 @@ class SimpleShader {
   }
 
   activate(pixelColor) {
-    let mGL = core.getGL();
+    let mGL = glSys.get();
 
     // specifiy the shader to use
     mGL.useProgram(this.mCompiledShader);
@@ -71,7 +71,7 @@ function loadAndCompileShader(filePath, shaderType) {
   let xmlReq = new XMLHttpRequest();
   let shaderSource = null
   let compiledShader = null;
-  let gl = core.getGL();
+  let gl = glSys.get();
 
   // Step A: Get the shader source from the file path
   // NOTE: this will be change to be asynchronous in Chapter 4

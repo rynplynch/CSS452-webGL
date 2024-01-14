@@ -1,5 +1,5 @@
 "use strict";
-import * as core from "./core.js";
+import * as glSys from "./gl.js";
 
 // the location in memory where the WebGL buffer resides
 let mGLVertexBuffer = null;
@@ -18,7 +18,7 @@ let mVerticesOfSquare = [
 ];
 
 function init() {
-  let mGL = core.getGL();
+  let mGL = glSys.get();
 
   // use the function createBuffer that is provided by webGL
   // this makes mGLVertexBuffer point to a webGL buffer

@@ -4,19 +4,28 @@
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-import * as engine from "../engine/core.js";
+import engine from "../engine/index.js";
 
 class MyGame {
     constructor(htmlCanvasID) {
         // Step A: Initialize the game engine
         engine.init(htmlCanvasID);
 
-        // Step B: Clear the canvas
-        // engine.clearCanvas([0.6, 0.6, 0.6, 1]);
-        engine.clearCanvas([0, 1, 0, 1]);
+        // Create objects to be drawn
+        this.mWhiteSq = new engine.Renderable();
+        this.mWhiteSq.setColor([1, 1, 1, 1]);
+        this.mRedSq = new engine.Renderable();
+        this.mRedSq.setColor([1, 0, 0, 1]);
 
-        // pass in the color for the square as an array
-        engine.drawSquare([1, 0, 0, 1]);
+        // clear canvas
+        engine.clearCanvas([0, 0.8, 0, 1]);
+
+        // draw object using white shader
+        this.mWhiteSq.draw();
+
+        // draw object using red shader
+        this.mRedSq.draw();
+
         let recY = 0.6;     // y-location of rectangles
         let triY = 0.0;     // y-location of triangles
         let cirY = -0.6;    // y-location of circles
