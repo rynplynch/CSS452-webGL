@@ -1,112 +1,125 @@
-"using strict";
-import * as glSys from "./core/gl.js";
-import * as vertexBuffer from "./core/vertex_buffer.js";
+/*
+ * File: simple_shader.js
+ *
+ * Defines the SimpleShader class
+ *
+ */
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
+
+import * as core from "./core.js";
 
 class SimpleShader {
-  constructor(vertexShaderID, fragmentShaderID) {
-    this.mCompiledShader = null;
-    this.mVertexPositionRef = null;
-    this.mPixelColorRef = null;
 
-    let mGL = glSys.get();
+    // constructor of SimpleShader object
+    constructor(vertexShaderPath, fragmentShaderPath) {
+        // instance variables
+        // Convention: all instance variables: mVariables
+        this.mCompiledShader = null;  // reference to the compiled shader in webgl context
+        this.mVertexPositionRef = null; // reference to VertexPosition within the shader
+        this.mVertexOffsetRef = null; // reference to offset within the shader
+        this.mVertexScaleRef = null; // reference to scale within the shader
+        this.mPixelColorRef = null;     // reference to the pixelColor uniform in the fragment shader
 
-    // use or load an compile function to generate our shaders
-    this.mVertexShader = loadAndCompileShader(vertexShaderID, mGL.VERTEX_SHADER);
-    this.mFragmentShader = loadAndCompileShader(fragmentShaderID, mGL.FRAGMENT_SHADER);
+        let gl = core.getGL();
+        //
+        // Step A: load and compile vertex and fragment shaders
+        this.mVertexShader = loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
+        this.mFragmentShader = loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
-    // create program
-    this.mCompiledShader = mGL.createProgram();
+        // Step B: Create and link the shaders into a program.
+        this.mCompiledShader = gl.createProgram();
+        gl.attachShader(this.mCompiledShader, this.mVertexShader);
+        gl.attachShader(this.mCompiledShader, this.mFragmentShader);
+        gl.linkProgram(this.mCompiledShader);
 
-    // attach shaders to program
-    mGL.attachShader(this.mCompiledShader, this.mVertexShader);
-    mGL.attachShader(this.mCompiledShader, this.mFragmentShader);
+        // Step C: check for error
+        if (!gl.getProgramParameter(this.mCompiledShader, gl.LINK_STATUS)) {
+            throw new Error("Shader linking failed with [" + vertexShaderPath + " " + fragmentShaderPath +"].");
+            return null;
+        }
 
-    // link program
-    mGL.linkProgram(this.mCompiledShader);
+        // Step D: Gets a reference to the aVertexPosition attribute within the shaders.
+        this.mVertexPositionRef = gl.getAttribLocation(this.mCompiledShader, "aVertexPosition");
+        this.mVertexOffsetRef = gl.getUniformLocation(this.mCompiledShader, "uOffset");
+        this.mVertexScaleRef = gl.getUniformLocation(this.mCompiledShader, "uScale");
 
-    // check for errors
-    if (!mGL.getProgramParameter(this.mCompiledShader, mGL.LINK_STATUS)) {
-        throw new Error("Error linking shader to program");
+        // Step E: Gets a reference to the uniform variable uPixelColor in the fragment shader
+        this.mPixelColorRef = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
+    }
+
+
+    // Activate the shader for rendering
+    activate(buffer, pixelColor, scale, pos) {
+        let gl = core.getGL();
+        gl.useProgram(this.mCompiledShader);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.vertexAttribPointer(this.mVertexPositionRef,
+            3,              // each element is a 3-float (x,y.z)
+            gl.FLOAT,       // data type is FLOAT
+            false,          // if the content is normalized vectors
+            0,              // number of bytes to skip in between elements
+            0);             // offsets to the first element
+        gl.uniform2fv(this.mVertexScaleRef, scale);
+        gl.uniform2fv(this.mVertexOffsetRef, pos);
+        gl.enableVertexAttribArray(this.mVertexPositionRef);
+        // load uniforms
+        gl.uniform4fv(this.mPixelColorRef, pixelColor);
+    }
+}
+
+//**-----------------------------------
+// Private methods not visible outside of this file
+// **------------------------------------
+
+//
+// Returns a compiled shader from a shader in the dom.
+// The id is the id of the script in the html tag.
+function loadAndCompileShader(filePath, shaderType) {
+    let xmlReq, shaderSource = null, compiledShader = null;
+    let gl = core.getGL();
+
+    // Step A: Request the text from the given file location.
+    xmlReq = new XMLHttpRequest();
+    xmlReq.open('GET', filePath, false);
+    try {
+        xmlReq.send();
+    } catch (error) {
+        throw new Error("Failed to load shader: " + filePath + " [Hint: you cannot double click index.html to run this project. " +
+                "The index.html file must be loaded by a web-server.]");
+        return null;
+    }
+    shaderSource = xmlReq.responseText;
+
+    if (shaderSource === null) {
+        throw new Error("WARNING: Loading of:" + filePath + " Failed!");
         return null;
     }
 
-    // set reference for the position of the vertex
-    this.mVertexPositionRef = mGL.getAttribLocation(
-      this.mCompiledShader,
-      "aVertexPosition");
+    // Step B: Create the shader based on the shader type: vertex or fragment
+    compiledShader = gl.createShader(shaderType);
 
-    // get the pointer for Uniform type
-    // set equal to our own pointer so we can reference it
-    this.mPixelColorRef = mGL.getUniformLocation(
-      this.mCompiledShader,
-      "uPixelColor"
-    );
-  }
+    // Step C: Compile the created shader
+    gl.shaderSource(compiledShader, shaderSource);
+    gl.compileShader(compiledShader);
 
-  activate(pixelColor) {
-    let mGL = glSys.get();
+    // Step D: check for errors and return results (null if error)
+    // The log info is how shader compilation errors are typically displayed.
+    // This is useful for debugging the shaders.
+    if (!gl.getShaderParameter(compiledShader, gl.COMPILE_STATUS)) {
+        throw new Error("A shader compiling error occurred: " + gl.getShaderInfoLog(compiledShader));
+    }
 
-    // specifiy the shader to use
-    mGL.useProgram(this.mCompiledShader);
-
-    // bind the vertex buffer to the Array Buffer attribute
-    mGL.bindBuffer(mGL.ARRAY_BUFFER, vertexBuffer.get());
-    mGL.vertexAttribPointer(this.mVertexPositionRef,
-                            3, // each element has x,y,z
-                            mGL.FLOAT, // specify data type
-                            false, // does not contain normalized vectors
-                            0, // bytes to skip between elements
-                            0 // offset of first element
-                            );
-
-    mGL.enableVertexAttribArray(this.mVertexPositionRef);
-
-    // reference the uniform data type
-    // alter that reference with the passed in parameter
-    mGL.uniform4fv(this.mPixelColorRef, pixelColor);
-  }
+    return compiledShader;
 }
+//-- end of private methods
 
-function loadAndCompileShader(filePath, shaderType) {
-  let xmlReq = new XMLHttpRequest();
-  let shaderSource = null
-  let compiledShader = null;
-  let gl = glSys.get();
 
-  // Step A: Get the shader source from the file path
-  // NOTE: this will be change to be asynchronous in Chapter 4
-  xmlReq.open('GET', filePath, false);
-  try {
-    xmlReq.send();
-  } catch (error) {
-    throw new Error("Failed to load shader: "
-                   + filePath
-                    + "[Hint: you cannot double click index.html to run this project"
-                    + "you must run using live-server or any web-server.]");
-    return null;
-  }
-  shaderSource = xmlReq.responseText;
-
-  // if xmlReq returns null then an error occurred
-  if(shaderSource === null) {
-    throw new Error("WARNING: Loading of:" + filePath + " Failed!");
-    return null;
-  }
-  // Step B: Create the shader based on the shader type: vertex or fragment
-  compiledShader = gl.createShader(shaderType);
-
-  // Step C: Compile the created shader
-  gl.shaderSource(compiledShader, shaderSource);
-  gl.compileShader(compiledShader);
-
-  // Step D: check for errors and return results (null if error)
-  // The log info is how shader compilation errors are typically displayed.
-  // This is useful for debugging the shaders.
-  if (!gl.getShaderParameter(compiledShader, gl.COMPILE_STATUS)) {
-    throw new Error("A shader compiling error occurred: " + gl.getShaderInfoLog(compiledShader));
-  }
-
-  return compiledShader;
-}
-
+//
+// export the class, the default keyword says importer of this class cannot change the name "SimpleShader"
+// for this reason, to import this class, one must issue
+//      import SimpleShader from "./simple_shader.js";
+// attempt to change name, e.g.,
+//      import SimpleShader as MyShaderName from "./simple_shader.js";
+// will result in failure
+//
 export default SimpleShader;
