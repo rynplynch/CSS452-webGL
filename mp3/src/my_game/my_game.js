@@ -25,27 +25,6 @@ class MyGame {
 
         // draw object with the red shader
         this.mRedSq.draw();
-
-        let recY = 0.6;     // y-location of rectangles
-        let triY = 0.0;     // y-location of triangles
-        let cirY = -0.6;    // y-location of circles
-        
-        let xPos = [-0.8,  -0.58,  -0.3,  0.1,  0.7];   // x-position of the shapes
-        let size = [ [0.1, 0.3],                        // x/y size of the shapes
-                     [0.3, 0.1],
-                     [0.2, 0.2],
-                     [0.3, 0.3],
-                     [0.5, 0.5]
-        ];
-        
-        for (let i = 0; i<5; i++) {
-            let colorRef = xPos[i] + 0.8;
-            let color = [colorRef/2, colorRef/3, colorRef/4, 1.0];
-                              // color[4], size[2],   pos[x, y]
-            // engine.drawRectangle(color,    size[i],   [xPos[i], recY]);
-            // engine.drawTriangle (color,    size[i],   [xPos[i], triY]);
-            // engine.drawCircle   (color,    size[i],   [xPos[i], cirY]);
-        }
     }
 }
 
