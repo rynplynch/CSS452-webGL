@@ -1,0 +1,15 @@
+{
+  "name": "mp3",
+  "version": "1.0.0",
+  "description": "Draw three Canvases of different colors",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon --ext js,mjs,cjs,json,html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
