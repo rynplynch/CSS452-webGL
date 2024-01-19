@@ -12,6 +12,7 @@ let kSimpleFS = "src/glsl_shaders/simple_fs.glsl";
 let kShadowVS = "src/glsl_shaders/shadow_vs.glsl";
 
 let mConstColorShader = null;
+let mConstShadowShader = null;
 
 function createShaders() {
   mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
