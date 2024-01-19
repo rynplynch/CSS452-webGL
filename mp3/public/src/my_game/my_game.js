@@ -7,37 +7,36 @@
 import engine from "../engine/index.js";
 
 class MyGame {
-        constructor(htmlCanvasID) {
-                // Step A: Initialize the game engine
-                engine.init(htmlCanvasID);
+    constructor(htmlCanvasID) {
+        // Step A: Initialize the game engine
+        engine.init(htmlCanvasID);
 
-                // Create objects to be drawn
-                this.mWhiteSq = new engine.Renderable();
-                this.mWhiteSq.setColor([1, 1, 1, 1]);
-                this.mRedSq = new engine.Renderable();
-                this.mRedSq.setColor([1, 0, 0, 1]);
+        // Step B: Create the Renderable objects:
+        this.mWhiteSq = new engine.Renderable(true);
+        this.mWhiteSq.setColor([1, 1, 1, 1]);
+        this.mRedSq = new engine.Renderable(true);
+        this.mRedSq.setColor([1, 0, 0, 1]);
 
-                // clear canvas
-                engine.clearCanvas([0, 0.8, 0, 1]);
+        // Step C: Draw!
+        engine.clearCanvas([0, 0.8, 0, 1]);   // 1. Clear the canvas
 
-                let trsMatrix = mat4.create();
+        // instead of simply drawing the squares, let's apply simple transforms
+        // Step D: sets the blue Renderable object's transform
+        this.mWhiteSq.getXform().setPosition(-0.25, 0.25);
+        this.mWhiteSq.getXform().setRotationInRad(0.2); // In Radians
+        this.mWhiteSq.getXform().setSize(1.2, 1.2);
+        // Step E: draws the blue square (transform behavior in the object)
+        this.mWhiteSq.draw();
 
-                mat4.translate(trsMatrix, trsMatrix, vec3.fromValues(-0.25, 0.25,  0.0));
-                mat4.rotateZ(trsMatrix, trsMatrix, 0.2);
-                mat4.scale(trsMatrix, trsMatrix, vec3.fromValues(1.2, 1.2, 1.0));
-                // draw object with the white shader
-                this.mWhiteSq.draw(trsMatrix);
-
-                // clear the transform matrix
-                mat4.identity(trsMatrix);
-
-                mat4.translate(trsMatrix, trsMatrix, vec3.fromValues(0.25, -0.25, 0.0));
-                mat4.rotateZ(trsMatrix, trsMatrix, -0.785);
-                mat4.scale(trsMatrix, trsMatrix, vec3.fromValues(0.4, 0.4, 1.0));
-
-                // draw object with the red shader
-                this.mRedSq.draw(trsMatrix);
-        }
+        // Step F: sets the red square transform    
+        this.mRedSq.getXform().setXPos(-0.5);  // to show alternative to setPosition
+        this.mRedSq.getXform().setYPos(-0.5); // it is possible to setX/Y separately
+        this.mRedSq.getXform().setRotationInDegree(45);  // this is in Degree
+        this.mRedSq.getXform().setWidth(0.4);  // to show alternative to setSize
+        this.mRedSq.getXform().setHeight(0.4);  // that it is possible to width/height separately
+        // Step G: draw the red square (transform in the object)
+        this.mRedSq.draw();
+    }
 }
 
 export default MyGame;
