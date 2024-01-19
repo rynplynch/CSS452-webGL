@@ -6,11 +6,13 @@ import SimpleShader from "../simple_shader.js";
 let kSimpleVS = "src/glsl_shaders/simple_vs.glsl";
 // fragment shader
 let kSimpleFS = "src/glsl_shaders/simple_fs.glsl";
+// shadow shader
+let kShadowVS = "src/glsl_shaders/shadow_vs.glsl";
 
 let mConstColorShader = null;
 
 function createShaders() {
-  mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
+  mConstColorShader = new SimpleShader(kSimpleVS, kShadowVS, kSimpleFS);
 }
 
 function init() {
