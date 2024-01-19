@@ -8,10 +8,12 @@ class Renderable {
     this.mShader = shaderResources.getConstColorShader();
     this.mColor = [1, 1, 1, 1];
   }
-  //TODO
-  draw() {
+  // function used to render object
+  draw(trsMatrix) {
     let gl = glSys.get();
-    this.mShader.activate(this.mColor);
+    // activate our shader
+    this.mShader.activate(this.mColor, trsMatrix);
+    // tell webGL to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
