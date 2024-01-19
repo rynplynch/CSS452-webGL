@@ -7,25 +7,37 @@
 import engine from "../engine/index.js";
 
 class MyGame {
-    constructor(htmlCanvasID) {
-        // Step A: Initialize the game engine
-        engine.init(htmlCanvasID);
+        constructor(htmlCanvasID) {
+                // Step A: Initialize the game engine
+                engine.init(htmlCanvasID);
 
-        // Create objects to be drawn
-        this.mWhiteSq = new engine.Renderable();
-        this.mWhiteSq.setColor([1, 1, 1, 1]);
-        this.mRedSq = new engine.Renderable();
-        this.mRedSq.setColor([1, 0, 0, 1]);
+                // Create objects to be drawn
+                this.mWhiteSq = new engine.Renderable();
+                this.mWhiteSq.setColor([1, 1, 1, 1]);
+                this.mRedSq = new engine.Renderable();
+                this.mRedSq.setColor([1, 0, 0, 1]);
 
-        // clear canvas
-        engine.clearCanvas([0, 0.8, 0, 1]);
+                // clear canvas
+                engine.clearCanvas([0, 0.8, 0, 1]);
 
-        // draw object with the white shader
-        this.mWhiteSq.draw();
+                let trsMatrix = mat4.create();
 
-        // draw object with the red shader
-        this.mRedSq.draw();
-    }
+                mat4.translate(trsMatrix, trsMatrix, vec3.fromValues(-0.25, 0.25,  0.0));
+                mat4.rotateZ(trsMatrix, trsMatrix, 0.2);
+                mat4.scale(trsMatrix, trsMatrix, vec3.fromValues(1.2, 1.2, 1.0));
+                // draw object with the white shader
+                this.mWhiteSq.draw(trsMatrix);
+
+                // clear the transform matrix
+                mat4.identity(trsMatrix);
+
+                mat4.translate(trsMatrix, trsMatrix, vec3.fromValues(0.25, -0.25, 0.0));
+                mat4.rotateZ(trsMatrix, trsMatrix, -0.785);
+                mat4.scale(trsMatrix, trsMatrix, vec3.fromValues(0.4, 0.4, 1.0));
+
+                // draw object with the red shader
+                this.mRedSq.draw(trsMatrix);
+        }
 }
 
 export default MyGame;
