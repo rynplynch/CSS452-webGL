@@ -2,7 +2,7 @@
 import * as glSys from "./core/gl.js";
 import * as vertexBuffer from "./core/vertex_buffer.js";
 
-class SimpleShader {
+export class SimpleShader {
   constructor(vertexShaderID, fragmentShaderID) {
     this.mCompiledShader = null;
     this.mVertexPositionRef = null;
@@ -77,6 +77,12 @@ class SimpleShader {
   }
 }
 
+export class ShadowShader extends SimpleShader {
+  test() {
+    console.log("HELLO");
+  }
+}
+
 function loadAndCompileShader(filePath, shaderType) {
   let xmlReq = new XMLHttpRequest();
   let shaderSource = null
@@ -118,5 +124,3 @@ function loadAndCompileShader(filePath, shaderType) {
 
   return compiledShader;
 }
-
-export default SimpleShader;

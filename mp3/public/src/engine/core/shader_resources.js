@@ -1,6 +1,8 @@
 "use strict";
 
-import SimpleShader from "../simple_shader.js";
+import {SimpleShader as SimpleShader,
+        ShadowShader as ShadowShader
+       } from "../simple_shader.js";
 
 // vertex shader
 let kSimpleVS = "src/glsl_shaders/simple_vs.glsl";
