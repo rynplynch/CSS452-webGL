@@ -12,7 +12,8 @@ let kShadowVS = "src/glsl_shaders/shadow_vs.glsl";
 let mConstColorShader = null;
 
 function createShaders() {
-  mConstColorShader = new SimpleShader(kSimpleVS, kShadowVS, kSimpleFS);
+  mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
+  mConstShadowShader = new ShadowShader(kShadowVS, kSimpleFS);
 }
 
 function init() {
@@ -20,5 +21,6 @@ function init() {
 }
 
 function getConstColorShader() { return mConstColorShader; }
+function getConstShadowShader() { return mConstShadowShader; }
 
 export {createShaders, getConstColorShader, init}
