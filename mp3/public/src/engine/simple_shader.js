@@ -73,7 +73,7 @@ class SimpleShader {
     // setting pixel color
     mGL.uniform4fv(this.mPixelColorRef, pixelColor);
     // setting transform matrix
-    mGL.uniformMatrix4fv(this.mModelMatrixRef, trsMatrix);
+    mGL.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix);
   }
 }
 
