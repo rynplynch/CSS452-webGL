@@ -13,9 +13,4 @@ var srcPath = path.join(__dirname, 'public');
 // all files copied to client
 app.use(express.static(srcPath));
 
-// app.use('/', (req, res) => {
-//   res.setHeader("Content-Type", "text/html");
-//   res.end("hello");
-// });
-
 module.exports = app;

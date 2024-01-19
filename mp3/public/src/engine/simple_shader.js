@@ -7,6 +7,7 @@ class SimpleShader {
     this.mCompiledShader = null;
     this.mVertexPositionRef = null;
     this.mPixelColorRef = null;
+    this.mModelMatrixRef = null;
 
     let mGL = glSys.get();
 
@@ -37,13 +38,19 @@ class SimpleShader {
 
     // get the pointer for Uniform type
     // set equal to our own pointer so we can reference it
+    // Color reference
     this.mPixelColorRef = mGL.getUniformLocation(
       this.mCompiledShader,
       "uPixelColor"
     );
+    // Transform matrix reference
+    this.mModelMatrixRef = mGL.getUniformLocation(
+      this.mCompiledShader,
+      "uModelXformMatrix"
+    );
   }
 
-  activate(pixelColor) {
+  activate(pixelColor, trsMatrix) {
     let mGL = glSys.get();
 
     // specifiy the shader to use
@@ -63,7 +70,10 @@ class SimpleShader {
 
     // reference the uniform data type
     // alter that reference with the passed in parameter
+    // setting pixel color
     mGL.uniform4fv(this.mPixelColorRef, pixelColor);
+    // setting transform matrix
+    mGL.uniformMatrix4fv(this.mModelMatrixRef, trsMatrix);
   }
 }
 
