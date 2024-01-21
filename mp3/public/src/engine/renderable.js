@@ -10,18 +10,27 @@ class Renderable {
     this.mShadowShader = shaderResources.getConstShadowShader();
     this.mShader = shaderResources.getConstColorShader();
     this.mColor = [1, 1, 1, 1];
-    this.mShadowColor = [0, 0, 0, 0];
-    this.mShadowOffset = [0, 0];
+    this.mShadowColor = [0.0, 0.0, 0.0, 1];
+    this.mShadowOffset = [.05, .05];
     this.mXform = new Transform();
   }
   // function used to render object
   draw() {
     let gl = glSys.get();
+    if(this.hasShadow){
+    // activate our shadow shader
+      console.log(this.mShadowColor)
+    this.mShadowShader.activate(this.mShadowColor,
+                                this.mXform.getTRSMatrix(),
+                                this.mShadowOffset
+                          );
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    }
     // activate our shader
     this.mShader.activate(this.mColor,
-                          this.mXform.getTRSMatrix(),
-                          this.mShadowOffset,
-                          this.mShadowColor);
+                          this.mXform.getTRSMatrix()
+                          );
     // tell webGL to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
