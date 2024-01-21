@@ -18,7 +18,10 @@ class Renderable {
   draw() {
     let gl = glSys.get();
     // activate our shader
-    this.mShader.activate(this.mColor, this.mXform.getTRSMatrix());
+    this.mShader.activate(this.mColor,
+                          this.mXform.getTRSMatrix(),
+                          this.mShadowOffset,
+                          this.mShadowColor);
     // tell webGL to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
