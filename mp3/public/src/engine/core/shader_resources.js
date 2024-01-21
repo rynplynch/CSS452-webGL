@@ -26,4 +26,4 @@ function init() {
 function getConstColorShader() { return mConstColorShader; }
 function getConstShadowShader() { return mConstShadowShader; }
 
-export {createShaders, getConstColorShader, init}
+export {createShaders, getConstShadowShader, getConstColorShader, init}
