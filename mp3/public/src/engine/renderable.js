@@ -11,6 +11,7 @@ class Renderable {
     this.mShader = shaderResources.getConstColorShader();
     this.mColor = [1, 1, 1, 1];
     this.mShadowColor = [0, 0, 0, 0];
+    this.mShadowOffset = [0, 0];
     this.mXform = new Transform();
   }
   // function used to render object
@@ -23,6 +24,8 @@ class Renderable {
   }
 
   setColor(color) { this.mColor = color; }
+  setShadowColor(color) { this.mShadowColor = color; }
+  setShadowOffset(shadowOffset) { this.mShadowOffset = shadowOffset };
   getColor() { return this.mColor; }
   getXform() { return this.mXform; }
 }
