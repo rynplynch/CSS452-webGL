@@ -5,9 +5,12 @@ import * as shaderResources from "./core/shader_resources.js";
 import Transform from "./transform.js";
 
 class Renderable {
-  constructor() {
+  constructor(hasShadow) {
+    this.hasShadow = hasShadow;
+    this.mShadowShader = shaderResources.getConstShadowShader();
     this.mShader = shaderResources.getConstColorShader();
     this.mColor = [1, 1, 1, 1];
+    this.mShadowColor = [0, 0, 0, 0];
     this.mXform = new Transform();
   }
   // function used to render object
