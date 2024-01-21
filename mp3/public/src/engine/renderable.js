@@ -19,7 +19,6 @@ class Renderable {
     let gl = glSys.get();
     if(this.hasShadow){
     // activate our shadow shader
-      console.log(this.mShadowColor)
     this.mShadowShader.activate(this.mShadowColor,
                                 this.mXform.getTRSMatrix(),
                                 this.mShadowOffset

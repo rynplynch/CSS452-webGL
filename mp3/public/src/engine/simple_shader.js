@@ -8,6 +8,8 @@ export class SimpleShader {
     this.mVertexPositionRef = null;
     this.mPixelColorRef = null;
     this.mModelMatrixRef = null;
+    this.mShadowOffXRef = null;
+    this.mShadowOffYRef = null;
 
     let mGL = glSys.get();
 
@@ -48,9 +50,18 @@ export class SimpleShader {
       this.mCompiledShader,
       "uModelXformMatrix"
     );
+    // shadow offset vector reference
+    this.mShadowOffXRef = mGL.getUniformLocation(
+      this.mCompiledShader,
+      "uOffsetX"
+    );
+    this.mShadowOffYRef = mGL.getUniformLocation(
+      this.mCompiledShader,
+      "uOffsetY"
+    );
   }
 
-  activate(pixelColor, trsMatrix) {
+  activate(pixelColor, trsMatrix, shadowOffset) {
     let mGL = glSys.get();
 
     // specifiy the shader to use
@@ -74,12 +85,12 @@ export class SimpleShader {
     mGL.uniform4fv(this.mPixelColorRef, pixelColor);
     // setting transform matrix
     mGL.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix);
-  }
-}
+    if(typeof shadowOffset !== 'undefined'){
+    // setting X offset
+    mGL.uniform1f(this.mShadowOffXRef, shadowOffset[0]);
+    mGL.uniform1f(this.mShadowOffYRef, shadowOffset[1]);
 
-export class ShadowShader extends SimpleShader {
-  test() {
-    console.log("HELLO");
+    }
   }
 }
 

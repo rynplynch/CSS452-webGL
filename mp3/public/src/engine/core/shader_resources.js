@@ -1,7 +1,6 @@
 "use strict";
 
 import {SimpleShader as SimpleShader,
-        ShadowShader as ShadowShader
        } from "../simple_shader.js";
 
 // vertex shader
@@ -16,7 +15,7 @@ let mConstShadowShader = null;
 
 function createShaders() {
   mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
-  mConstShadowShader = new ShadowShader(kShadowVS, kSimpleFS);
+  mConstShadowShader = new SimpleShader(kShadowVS, kSimpleFS);
 }
 
 function init() {
