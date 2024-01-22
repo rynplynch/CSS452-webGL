@@ -17,13 +17,13 @@ class Renderable {
   // function used to render object
   draw() {
     let gl = glSys.get();
+
+
     if(this.hasShadow){
-    // activate our shadow shader
-    this.mShadowShader.activate(this.mShadowColor,
-                                this.mXform.getTRSMatrix(),
-                                this.mShadowOffset
-                          );
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      // activate our shadow shader
+      this.mShadowShader.activate(this.mShadowColor, this.mXform.getTRSMatrix());
+      this.mShadowShader.setShadowOffset(this.mShadowOffset);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     }
     // activate our shader

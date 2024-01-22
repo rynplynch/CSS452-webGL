@@ -2,96 +2,82 @@
 import * as glSys from "./core/gl.js";
 import * as vertexBuffer from "./core/vertex_buffer.js";
 
-export class SimpleShader {
-  constructor(vertexShaderID, fragmentShaderID) {
-    this.mCompiledShader = null;
-    this.mVertexPositionRef = null;
-    this.mPixelColorRef = null;
-    this.mModelMatrixRef = null;
-    this.mShadowOffXRef = null;
-    this.mShadowOffYRef = null;
+class SimpleShader {
 
-    let mGL = glSys.get();
+    // constructor of SimpleShader object
+    constructor(vertexShaderPath, fragmentShaderPath) {
+        // instance variables
+        // Convention: all instance variables: mVariables
+        this.mCompiledShader = null;  // reference to the compiled shader in webgl context
+        this.mVertexPositionRef = null; // reference to VertexPosition within the shader
+        this.mPixelColorRef = null;     // reference to the pixelColor uniform in the fragment shader
+        this.mModelMatrixRef = null; // reference to model transform matrix in vertex shader
 
-    // use or load an compile function to generate our shaders
-    this.mVertexShader = loadAndCompileShader(vertexShaderID, mGL.VERTEX_SHADER);
-    this.mFragmentShader = loadAndCompileShader(fragmentShaderID, mGL.FRAGMENT_SHADER);
+        let gl = glSys.get();
+        //
+        // Step A: load and compile vertex and fragment shaders
+        this.mVertexShader = loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
+        this.mFragmentShader = loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
-    // create program
-    this.mCompiledShader = mGL.createProgram();
+        // Step B: Create and link the shaders into a program.
+        this.mCompiledShader = gl.createProgram();
+        gl.attachShader(this.mCompiledShader, this.mVertexShader);
+        gl.attachShader(this.mCompiledShader, this.mFragmentShader);
+        gl.linkProgram(this.mCompiledShader);
 
-    // attach shaders to program
-    mGL.attachShader(this.mCompiledShader, this.mVertexShader);
-    mGL.attachShader(this.mCompiledShader, this.mFragmentShader);
+        // Step C: check for error
+        if (!gl.getProgramParameter(this.mCompiledShader, gl.LINK_STATUS)) {
+            throw new Error("Shader linking failed with [" + vertexShaderPath + " " + fragmentShaderPath +"].");
+            return null;
+        }
 
-    // link program
-    mGL.linkProgram(this.mCompiledShader);
+        // Step D: Gets a reference to the aVertexPosition attribute within the shaders.
+        this.mVertexPositionRef = gl.getAttribLocation(this.mCompiledShader, "aVertexPosition");
 
-    // check for errors
-    if (!mGL.getProgramParameter(this.mCompiledShader, mGL.LINK_STATUS)) {
-        throw new Error("Error linking shader to program");
-        return null;
-    }
-
-    // set reference for the position of the vertex
-    this.mVertexPositionRef = mGL.getAttribLocation(
-      this.mCompiledShader,
-      "aVertexPosition");
-
-    // get the pointer for Uniform type
-    // set equal to our own pointer so we can reference it
-    // Color reference
-    this.mPixelColorRef = mGL.getUniformLocation(
-      this.mCompiledShader,
-      "uPixelColor"
-    );
-    // Transform matrix reference
-    this.mModelMatrixRef = mGL.getUniformLocation(
-      this.mCompiledShader,
-      "uModelXformMatrix"
-    );
-    // shadow offset vector reference
-    this.mShadowOffXRef = mGL.getUniformLocation(
-      this.mCompiledShader,
-      "uOffsetX"
-    );
-    this.mShadowOffYRef = mGL.getUniformLocation(
-      this.mCompiledShader,
-      "uOffsetY"
-    );
-  }
-
-  activate(pixelColor, trsMatrix, shadowOffset) {
-    let mGL = glSys.get();
-
-    // specifiy the shader to use
-    mGL.useProgram(this.mCompiledShader);
-
-    // bind the vertex buffer to the Array Buffer attribute
-    mGL.bindBuffer(mGL.ARRAY_BUFFER, vertexBuffer.get());
-    mGL.vertexAttribPointer(this.mVertexPositionRef,
-                            3, // each element has x,y,z
-                            mGL.FLOAT, // specify data type
-                            false, // does not contain normalized vectors
-                            0, // bytes to skip between elements
-                            0 // offset of first element
-                            );
-
-    mGL.enableVertexAttribArray(this.mVertexPositionRef);
-
-    // reference the uniform data type
-    // alter that reference with the passed in parameter
-    // setting pixel color
-    mGL.uniform4fv(this.mPixelColorRef, pixelColor);
-    // setting transform matrix
-    mGL.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix);
-    if(typeof shadowOffset !== 'undefined'){
-    // setting X offset
-    mGL.uniform1f(this.mShadowOffXRef, shadowOffset[0]);
-    mGL.uniform1f(this.mShadowOffYRef, shadowOffset[1]);
+        // Step E: Gets a reference to the uniform variables in the fragment shader
+        this.mPixelColorRef = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
+        this.mModelMatrixRef = gl.getUniformLocation(this.mCompiledShader, "uModelXformMatrix");
 
     }
-  }
+
+    // Activate the shader for rendering
+    activate(pixelColor, trsMatrix) {
+        let gl = glSys.get();
+        gl.useProgram(this.mCompiledShader);
+
+        // bind vertex buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer.get());
+        gl.vertexAttribPointer(this.mVertexPositionRef,
+            3,              // each element is a 3-float (x,y.z)
+            gl.FLOAT,       // data type is FLOAT
+            false,          // if the content is normalized vectors
+            0,              // number of bytes to skip in between elements
+            0);             // offsets to the first element
+        gl.enableVertexAttribArray(this.mVertexPositionRef);
+
+        // load uniforms
+        gl.uniform4fv(this.mPixelColorRef, pixelColor);
+        gl.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix);
+    }
+}
+
+class ShadowShader extends SimpleShader {
+    constructor(vPath, fPath) {
+        super(vPath, fPath);
+
+        let gl = glSys.get();
+        // to support shadow
+        this.mOffsetXRef = gl.getUniformLocation(this.mCompiledShader, "uOffsetX");
+        this.mOffsetYRef = gl.getUniformLocation(this.mCompiledShader, "uOffsetY");
+    }
+
+    // to be called _after_ activate()
+    setShadowOffset(offset) {
+        let gl = glSys.get();
+        // shadow
+        gl.uniform1f(this.mOffsetXRef, offset[0]);
+        gl.uniform1f(this.mOffsetYRef, offset[1]);
+    }
 }
 
 function loadAndCompileShader(filePath, shaderType) {
@@ -135,3 +121,5 @@ function loadAndCompileShader(filePath, shaderType) {
 
   return compiledShader;
 }
+
+export {SimpleShader, ShadowShader};

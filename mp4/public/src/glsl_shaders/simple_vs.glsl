@@ -18,7 +18,8 @@ uniform mat4 uCameraXformMatrix;
 void main(void) {
     // gl_Position:
     // the clip-space output position of the current vertex.
-    gl_Position = uCameraXformMatrix *
+    gl_Position =
+        // uCameraXformMatrix *
         uModelXformMatrix *
         vec4(aVertexPosition, 1.0);
 }
