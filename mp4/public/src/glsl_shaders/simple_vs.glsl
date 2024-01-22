@@ -7,10 +7,12 @@
 attribute vec3 aVertexPosition;
 
 // 4x4 matrix that allows for transform out of Model Space
-// this makes our model vertex into Normalized Device Coordinates
+// moves vertices into WC space
 uniform mat4 uModelXformMatrix;
 
 // 4x4 matrix used in the camera transform
+// this takes our WC(World Coordinates) and
+// returns Normalized Device Coordinates
 uniform mat4 uCameraXformMatrix;
 
 void main(void) {
