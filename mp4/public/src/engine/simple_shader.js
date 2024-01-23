@@ -6,42 +6,51 @@ class SimpleShader {
 
     // constructor of SimpleShader object
     constructor(vertexShaderPath, fragmentShaderPath) {
-        // instance variables
-        // Convention: all instance variables: mVariables
-        this.mCompiledShader = null;  // reference to the compiled shader in webgl context
-        this.mVertexPositionRef = null; // reference to VertexPosition within the shader
-        this.mPixelColorRef = null;     // reference to the pixelColor uniform in the fragment shader
-        this.mModelMatrixRef = null; // reference to model transform matrix in vertex shader
+      // instance variables
+      // Convention: all instance variables: mVariables
+      // reference to the compiled shader in webgl context
+      this.mCompiledShader = null;
+      // reference to VertexPosition within the shader
+      this.mVertexPositionRef = null;
+      // reference to the pixelColor uniform in the fragment shader
+      this.mPixelColorRef = null;
+      // reference to model transform matrix in vertex shader
+      this.mModelMatrixRef = null;
+      // reference to camera transform matrix in vertex shader
+      this.mCameraMatrixRef = null;
 
-        let gl = glSys.get();
-        //
-        // Step A: load and compile vertex and fragment shaders
-        this.mVertexShader = loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
-        this.mFragmentShader = loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
+      let gl = glSys.get();
+      //
+      // Step A: load and compile vertex and fragment shaders
+      this.mVertexShader = loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
+      this.mFragmentShader = loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
-        // Step B: Create and link the shaders into a program.
-        this.mCompiledShader = gl.createProgram();
-        gl.attachShader(this.mCompiledShader, this.mVertexShader);
-        gl.attachShader(this.mCompiledShader, this.mFragmentShader);
-        gl.linkProgram(this.mCompiledShader);
+      // Step B: Create and link the shaders into a program.
+      this.mCompiledShader = gl.createProgram();
+      gl.attachShader(this.mCompiledShader, this.mVertexShader);
+      gl.attachShader(this.mCompiledShader, this.mFragmentShader);
+      gl.linkProgram(this.mCompiledShader);
 
-        // Step C: check for error
-        if (!gl.getProgramParameter(this.mCompiledShader, gl.LINK_STATUS)) {
-            throw new Error("Shader linking failed with [" + vertexShaderPath + " " + fragmentShaderPath +"].");
-            return null;
-        }
+      // Step C: check for error
+      if (!gl.getProgramParameter(this.mCompiledShader, gl.LINK_STATUS)) {
+        throw new Error("Shader linking failed with [" + vertexShaderPath + " " + fragmentShaderPath +"].");
+        return null;
+      }
 
-        // Step D: Gets a reference to the aVertexPosition attribute within the shaders.
-        this.mVertexPositionRef = gl.getAttribLocation(this.mCompiledShader, "aVertexPosition");
+      // Step D: Gets a reference to the aVertexPosition attribute within the shaders.
+      this.mVertexPositionRef = gl.getAttribLocation(this.mCompiledShader, "aVertexPosition");
 
-        // Step E: Gets a reference to the uniform variables in the fragment shader
-        this.mPixelColorRef = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
-        this.mModelMatrixRef = gl.getUniformLocation(this.mCompiledShader, "uModelXformMatrix");
-
+      // Step E: Gets a reference to the uniform variables in the fragment shader
+      // takes in [0,0,0,0] array which represents color of pixel
+      this.mPixelColorRef = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
+      // takes in 4x4 matrix to transform model from Model Space -> WC
+      this.mModelMatrixRef = gl.getUniformLocation(this.mCompiledShader, "uModelXformMatrix");
+      // takes in 4x4 matrix to transform WC into NDC
+      this.mCameraMatrixRef = gl.getUniformLocation(this.mCompiledShader, "uCameraXformMatrix");
     }
 
     // Activate the shader for rendering
-    activate(pixelColor, trsMatrix) {
+    activate(pixelColor, trsMatrix, cameraMatrix) {
         let gl = glSys.get();
         gl.useProgram(this.mCompiledShader);
 
@@ -58,6 +67,7 @@ class SimpleShader {
         // load uniforms
         gl.uniform4fv(this.mPixelColorRef, pixelColor);
         gl.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix);
+        gl.uniformMatrix4fv(this.mCameraMatrixRef, false, cameraMatrix);
     }
 }
 

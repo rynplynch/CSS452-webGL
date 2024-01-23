@@ -19,7 +19,7 @@ void main(void) {
     // gl_Position:
     // the clip-space output position of the current vertex.
     gl_Position =
-        // uCameraXformMatrix *
+        uCameraXformMatrix *
         uModelXformMatrix *
         vec4(aVertexPosition, 1.0);
 }
