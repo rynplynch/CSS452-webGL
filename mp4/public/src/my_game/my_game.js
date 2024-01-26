@@ -4,71 +4,97 @@
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+import * as loop from "../engine/core/loop.js";
 import engine from "../engine/index.js";
 
 class MyGame {
-    constructor(htmlCanvasID) {
-        // Step A: Initialize the game engine
-        engine.init(htmlCanvasID);
+        constructor() {
+                // renderables
+                this.mWhiteSq = null;
+                this.mRedSq = null
 
-        // Step B: Setup the camera
-        this.mCamera = new engine.Camera(
-            vec2.fromValues(20, 60),   // center of the WC
-            20,                        // width of WC
-            [20, 40, 600, 300]         // viewport (orgX, orgY, width, height)
-            );
+                // camera for the scene
+                this.mCamera = null;
+        }
 
-        // Step C: Create the Renderable objects:
-        this.mBlueSq = new engine.Renderable();
-        this.mBlueSq.setColor([0.25, 0.25, 0.95, 1]);
-        this.mRedSq = new engine.Renderable();
-        this.mRedSq.setColor([1, 0.25, 0.25, 1]);
-        this.mTLSq = new engine.Renderable();
-        this.mTLSq.setColor([0.9, 0.1, 0.1, 1]);
-        this.mTRSq = new engine.Renderable();
-        this.mTRSq.setColor([0.1, 0.9, 0.1, 1]);
-        this.mBRSq = new engine.Renderable();
-        this.mBRSq.setColor([0.1, 0.1, 0.9, 1]);
-        this.mBLSq = new engine.Renderable();
-        this.mBLSq.setColor([0.1, 0.1, 0.1, 1]);
+        init() {
+                // setup the camera
+                this.mCamera = new engine.Camera(
+                        vec2.fromValues(20, 60),
+                        20,
+                        [20, 40, 600, 300]
+                );
 
-        // Step D: Clear the canvas
-        engine.clearCanvas([0.9, 0.9, 0.9, 1]);        // Clear the canvas
+                // change the background color of the viewport
+                this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
 
-        // Step E: Starts the drawing by activating the camera
-        this.mCamera.setViewAndCameraMatrix();
+                // create the renderables
+                // set their colors
+                this.mWhiteSq = new engine.Renderable();
+                this.mWhiteSq.setColor([1, 1, 1, 1]);
+                this.mRedSq = new engine.Renderable();
+                this.mRedSq.setColor([1, 0, 0, 1]);
 
-        // Step F: Draw the blue square
-        // Center Blue, slightly rotated square
-        this.mBlueSq.getXform().setPosition(20, 60);
-        this.mBlueSq.getXform().setRotationInRad(0.2); // In Radians
-        this.mBlueSq.getXform().setSize(5, 5);
-        this.mBlueSq.draw(this.mCamera);
+                // change the position of these renderables
+                this.mWhiteSq.getXform().setPosition(20, 60);
+                this.mWhiteSq.getXform().setRotationInRad(0.2);
+                this.mWhiteSq.getXform().setSize(5, 5);
 
-        // Step G: Draw the center and the corner squares
-        // center red square
-        this.mRedSq.getXform().setPosition(20, 60);
-        this.mRedSq.getXform().setSize(2, 2);
-        this.mRedSq.draw(this.mCamera);
+                this.mRedSq.getXform().setPosition(20, 60);
+                this.mRedSq.getXform().setSize(2, 2);
+        }
 
-        // top left
-        this.mTLSq.getXform().setPosition(10, 65);
-        this.mTLSq.draw(this.mCamera);
+        draw() {
+                // color of the canvas
+                engine.clearCanvas([0.9, 0.9, 0.9, 1.0]);
 
-        // top right
-        this.mTRSq.getXform().setPosition(30, 65);
-        this.mTRSq.draw(this.mCamera);
+                // activate the camera
+                this.mCamera.setViewAndCameraMatrix();
 
-        // bottom right
-        this.mBRSq.getXform().setPosition(30, 55);
-        this.mBRSq.draw(this.mCamera);
+                // activate our renerables
+                this.mWhiteSq.draw(this.mCamera);
+                this.mRedSq.draw(this.mCamera);
+        }
 
-        // bottom left
-        this.mBLSq.getXform().setPosition(10, 55);
-        this.mBLSq.draw(this.mCamera);
-    }
+        // What changes in every loop of our game?
+        update() {
+                // this describes the position of our white/red square
+                let whiteXform = this.mWhiteSq.getXform();
+                let redXform = this.mRedSq.getXform();
+                // how much does the square move every loop?
+                let deltaX = 0.05;
+
+                // rotate the white square
+                // if the x position is greater than the bounds of the world
+                if (whiteXform.getXPos() > 30) {
+                        // set the position back to the left side of the viewport
+                        whiteXform.setPosition(10, 60);
+                }
+
+                // move the x position of the square
+                whiteXform.incXPosBy(deltaX);
+                // rotate the white square
+                whiteXform.incRotationByDegree(1);
+
+                // check the width of the red square
+                // should it reach this size
+                if (redXform.getWidth() > 5) {
+                        // reset the size
+                        redXform.setSize(2, 2);
+                }
+
+                // scale the red square
+                redXform.incSizeBy(deltaX);
+        }
 }
 
 window.onload = function() {
-    new MyGame('GLCanvas');
+        // give the engine the tag of the html canvas
+        engine.init("GLCanvas");
+
+        // create the game object
+        let myGame = new MyGame();
+
+        // first call of the game loop
+        loop.start(myGame);
 }
