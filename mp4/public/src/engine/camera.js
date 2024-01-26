@@ -1,4 +1,13 @@
-const glSys = require("./core/gl");
+import * as glSys from "./core/gl.js";
+
+// freeze takes in an object and returns an object
+// the returned object can not be altered in any way
+const eViewport = Object.freeze({
+eOrgX: 0,
+eOrgY: 1,
+eWidth: 2,
+eHeight: 3
+});
 
 class Camera {
   constructor(wcCenter, wcWidth, viewportArray) {
@@ -15,15 +24,6 @@ class Camera {
     // matrix to be used in transform
     this.mCameraMatrix = mat4.create();
   }
-
-  // freeze takes in an object and returns an object
-  // the returned object can not be altered in any way
-  const eViewport = Object.freeze({
-    eOrgX: 0,
-    eOrgY: 1,
-    eWidth: 2,
-    eHeight: 3
-  });
 
   getWCHeight() {
     // given width
@@ -61,20 +61,17 @@ class Camera {
                 this.mViewport[2],// width of the area to be drawn
                 this.mViewport[3]); // height of the area to be drawn
     // Step A2: set up the corresponding scissor area to limit
-    gl.scissor(
-      // passing in coordinates for bottom
-      // left corner of the viewport
-      // recall that mViewport is an array that holds:
-      // x, y, width, height
-      // these define our viewport
-      this.mViewport[0],
-      this.mViewport[1],
-      this.mViewport[2],
-      this.mViewport[3]);
-
+    console.log("matrix 0: " + this.mViewport[0],
+                '/n' + "matrix 1: " + this.mViewport[1],
+                '/n' + "matrix 2: " + this.mViewport[2],
+                '/n' + "matrix 3: " + this.mViewport[3],
+               );
+        gl.scissor(this.mViewport[0], // x position of bottom-left corner of the area to be drawn
+            this.mViewport[1], // y position of bottom-left corner of the area to be drawn
+            this.mViewport[2], // width of the area to be drawn
+            this.mViewport[3]);// height of the area to be drawn
     // the same as above, passing in all values of the array
-    gl.clearColor(this.mBGColor[0], this.mBGColor[1],
-                  this.mBGColor[2, this.mBGColor[3]]);
+    gl.clearColor(this.mBGColor[0], this.mBGColor[1], this.mBGColor[2], this.mBGColor[3]);
 
     // enable then disable scissor; this is resource demanding?
     gl.enable(gl.SCISSOR_TEST);
@@ -99,8 +96,8 @@ class Camera {
     mat4.translate(this.mCameraMatrix, this.mCameraMatrix,
                    vec3.fromValues(-center[0], -center[1], 0));
 
-    getCameraMatric() { return this.mCameraMatrix; }
   }
+    getCameraMatrix() { return this.mCameraMatrix; }
 }
 
 export default Camera;

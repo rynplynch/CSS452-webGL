@@ -23,7 +23,7 @@ class Renderable {
       // activate our shadow shader
       this.mShadowShader.activate(this.mShadowColor,
                                   this.mXform.getTRSMatrix(),
-                                  camera.getCameraMatrix);
+                                  camera.getCameraMatrix());
 
       // set shadow offset
       this.mShadowShader.setShadowOffset(this.mShadowOffset);
@@ -36,7 +36,7 @@ class Renderable {
     // activate our shader
     this.mShader.activate(this.mColor,
                           this.mXform.getTRSMatrix(),
-                          camera.getCamera);
+                          camera.getCameraMatrix());
     // tell webGL to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
