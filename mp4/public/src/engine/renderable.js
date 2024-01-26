@@ -15,14 +15,15 @@ class Renderable {
     this.mXform = new Transform();
   }
   // function used to render object
-  draw(cameraMatrix) {
+  draw(camera) {
     let gl = glSys.get();
 
 
     if(this.hasShadow){
       // activate our shadow shader
       this.mShadowShader.activate(this.mShadowColor,
-                                  this.mXform.getTRSMatrix());
+                                  this.mXform.getTRSMatrix(),
+                                  camera.getCameraMatrix);
 
       // set shadow offset
       this.mShadowShader.setShadowOffset(this.mShadowOffset);
@@ -35,7 +36,7 @@ class Renderable {
     // activate our shader
     this.mShader.activate(this.mColor,
                           this.mXform.getTRSMatrix(),
-                          cameraMatrix);
+                          camera.getCamera);
     // tell webGL to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
