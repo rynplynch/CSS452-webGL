@@ -1,14 +1,13 @@
 /*
- * File: MyGame.js 
+ * File: MyGame.js
  * This is the logic of our game. For now, this is very simple.
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 import engine from "../engine/index.js";
-import * as glSys from "../engine/core/gl.js";
 
 class MyGame {
-        constructor(htmlCanvasID) {
+    constructor(htmlCanvasID) {
         // Step A: Initialize the game engine
         engine.init(htmlCanvasID);
 
@@ -16,7 +15,7 @@ class MyGame {
         this.mCamera = new engine.Camera(
             vec2.fromValues(20, 60),   // center of the WC
             20,                        // width of WC
-                [20.0, 40.0, 600.0, 300.0]         // viewport (orgX, orgY, width, height)
+            [20, 40, 600, 300]         // viewport (orgX, orgY, width, height)
             );
 
         // Step C: Create the Renderable objects:
@@ -66,7 +65,10 @@ class MyGame {
 
         // bottom left
         this.mBLSq.getXform().setPosition(10, 55);
-        this.mBLSq.draw(this.mCamera);             }
+        this.mBLSq.draw(this.mCamera);
+    }
 }
 
-export default MyGame;
+window.onload = function() {
+    new MyGame('GLCanvas');
+}

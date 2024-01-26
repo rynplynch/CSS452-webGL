@@ -13,6 +13,9 @@ class Renderable {
     this.mShadowColor = [0.0, 0.0, 0.0, 1];
     this.mShadowOffset = [.05, .05];
     this.mXform = new Transform();
+
+    // saves a reference to the user created camera
+    this.mCameraRef = null;
   }
   // function used to render object
   draw(camera) {
