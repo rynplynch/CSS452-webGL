@@ -1,99 +1,151 @@
 /*
- * File: MyGame.js
+ * File: MyGame.js 
  * This is the logic of our game. For now, this is very simple.
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+// Accessing engine internal is not ideal, 
+//      this must be resolved! (later)
 import * as loop from "../engine/core/loop.js";
+
+// Engine stuff
 import engine from "../engine/index.js";
 
 class MyGame {
-        constructor() {
-                // renderables
-                this.mWhiteSq = null;
-                this.mRedSq = null
+    constructor() {
+        // variables for the cursor
+        this.mCursor = null;
 
-                // camera for the scene
-                this.mCamera = null;
-        }
+        // The camera to view the scene
+        this.mCamera = null;
 
-        init() {
-                // setup the camera
-                this.mCamera = new engine.Camera(
-                        vec2.fromValues(20, 60),
-                        20,
-                        [20, 40, 600, 300]
-                );
+        // System load specifics
+        this.mObjectSize = 2;
+        this.mNumPerLoad = 20;
+        this.mLoadSpread = 15;
 
-                // change the background color of the viewport
-                this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+        // UI Update time
+        this.mPreStatUpdateTime = performance.now();
+        this.kUIUpdatePeriod = 750; // update period
+    }
 
-                // create the renderables
-                // set their colors
-                this.mWhiteSq = new engine.Renderable();
-                this.mWhiteSq.setColor([1, 1, 1, 1]);
-                this.mRedSq = new engine.Renderable();
-                this.mRedSq.setColor([1, 0, 0, 1]);
+    init() {
+        // set up the cameras
+        this.mCamera = new engine.Camera(
+            vec2.fromValues(50, 37.5),   // position of the camera
+            100,                        // width of camera
+            [0, 0, 640, 480]         // viewport (orgX, orgY, width, height)
+        );
+        this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+        // sets the background to gray
 
-                // change the position of these renderables
-                this.mWhiteSq.getXform().setPosition(20, 60);
-                this.mWhiteSq.getXform().setRotationInRad(0.2);
-                this.mWhiteSq.getXform().setSize(5, 5);
+        // Initialize the cursor
+        this.mCursor = new engine.Cursor([50, 37.5], // Initial position of cursor
+                                         100  // wc width 
+                                       , 75); // wc height
 
-                this.mRedSq.getXform().setPosition(20, 60);
-                this.mRedSq.getXform().setSize(2, 2);
-        }
+        this.mCursor.setCursorSize(this.mObjectSize);
+        this.mCursor.setCursorRange(this.mLoadSpread);
+    }
 
-        draw() {
-                // color of the canvas
-                engine.clearCanvas([0.9, 0.9, 0.9, 1.0]);
 
-                // activate the camera
-                this.mCamera.setViewAndCameraMatrix();
+    // This is the draw function, make sure to setup proper drawing environment, and more
+    // importantly, make sure to _NOT_ change any state.
+    draw() {
+        // Step A: clear the canvas
+        engine.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-                // activate our renerables
-                this.mWhiteSq.draw(this.mCamera);
-                this.mRedSq.draw(this.mCamera);
-        }
+        // Step  B: Activate the drawing Camera
+        this.mCamera.setViewAndCameraMatrix();
 
-        // What changes in every loop of our game?
-        update() {
-                // For this very simple game, let's move the white square and pulse the red
+        // Step  C: Draw all objects
+        // engine.LoadUtil.drawLoads(this.mCamera);
+        this.mCursor.drawCursor(this.mCamera);
+    }
 
-                let whiteXform = this.mWhiteSq.getXform();
-                let deltaX = 0.05;
+    update() {
+        this._printLoadStat();
+        this._printLoopStat();
 
-                // Step A: test for white square movement
-                if (engine.input.isKeyPressed(engine.input.keys.Right)) {
-                        if (whiteXform.getXPos() > 30) { // this is the right-bound of the window
-                                whiteXform.setPosition(10, 60);
-                        }
-                        whiteXform.incXPosBy(deltaX);
-                }
+        // Let user update load stats
+        this.mNumPerLoad = this._updateSize(this.mNumPerLoad, engine.input.keys.P, engine.input.keys.O);
+        this.mObjectSize = this._updateSize(this.mObjectSize, engine.input.keys.K, engine.input.keys.J);
+        this.mLoadSpread = this._updateSize(this.mLoadSpread, engine.input.keys.M, engine.input.keys.N);
 
-                // Step  B: test for white square rotation
-                if (engine.input.isKeyClicked(engine.input.keys.Up)) {
-                        whiteXform.incRotationByDegree(10);
-                }
+        // update cursor position and size
+        this._updateCursor();
 
-                let redXform = this.mRedSq.getXform();
-                // Step  C: test for pulsing the red square
-                if (engine.input.isKeyPressed(engine.input.keys.Down)) {
-                        if (redXform.getWidth() > 5) {
-                                redXform.setSize(2, 2);
-                        }
-                        redXform.incSizeBy(0.05);
-                }
-        }
+        // Create or delete loads
+        if (engine.input.isKeyClicked(engine.input.keys.Space))
+            engine.LoadUtil.createLoadAt(this.mCursor.cursorLocation(), 
+                    this.mObjectSize, this.mNumPerLoad, this.mLoadSpread);
+
+        if (engine.input.isKeyClicked(engine.input.keys.D)) {
+            engine.LoadUtil.removeLastLoad();
+        }   
+    }
+
+    // Inc/Dec n based on inc/dec keys, returns the updated value
+    _updateSize(n, inc, dec) {
+        if (engine.input.isKeyClicked(inc))
+            n++;
+        if (engine.input.isKeyClicked(dec))
+            n--;
+        return n;
+    }
+
+    // Moves the cursor the the arrow keys
+    _updateCursor() {
+        let delta = 1;
+
+        // move the cursor
+        if (engine.input.isKeyPressed(engine.input.keys.Right)) 
+            this.mCursor.moveCursor(delta, 0);
+        
+        if (engine.input.isKeyPressed(engine.input.keys.Left))
+            this.mCursor.moveCursor(-delta, 0);
+
+        if (engine.input.isKeyPressed(engine.input.keys.Up)) 
+            this.mCursor.moveCursor(0, delta);
+
+        if (engine.input.isKeyPressed(engine.input.keys.Down)) 
+            this.mCursor.moveCursor(0, -delta);
+        
+        this.mCursor.setCursorSize(this.mObjectSize);
+        this.mCursor.setCursorRange(this.mLoadSpread);
+    }
+
+    _printLoopStat() {
+        let currentTime = performance.now();
+        if ((currentTime - this.mPreStatUpdateTime) < this.kUIUpdatePeriod)
+            return;
+        this.mPreStatUpdateTime = currentTime;
+
+        let stat = "<b>Total:</b><br>" +
+                    "&nbsp&nbsp <b>Total Cycles: </b>" + loop.totalCycles() + "<br>" +
+                    "&nbsp&nbsp <b>Total Elapsed Time: </b>" + (loop.totalRunningTime()/1000).toFixed(2) + " seconds<br>" +
+                "<b>Frame Time (Previous) :</b> " + loop.previousFrameTime().toFixed(2) + " milliseconds <br>" +
+                "<b>Lag:</b> accumulated(" + loop.accumulatedLag().toFixed(2) + ") max(" +
+                                loop.maxLagTime().toFixed(2) + ") milliseconds<br>" +
+                "<b>Update per Draw:</b> previous(" + loop.previousUpdatePerDraw() + ") max(" + loop.maxUpdatePerDraw() + ")";
+
+        document.getElementById("FrameStat").innerHTML = stat;
+    }
+
+    _printLoadStat() {
+        let stat = "<b>Load</b>: PerLoad(" + this.mNumPerLoad + " O/P) Size(" + 
+                    this.mObjectSize + " J/K) Spread(" + 
+                    this.mLoadSpread + " N/M)<br>" +
+            "&nbsp&nbsp Load count: " + engine.LoadUtil.numLoads() + "(object:" + engine.LoadUtil.numObjects() + ")";
+        document.getElementById("LoadStat").innerHTML = stat;
+    }
 }
 
-window.onload = function() {
-        // give the engine the tag of the html canvas
-        engine.init("GLCanvas");
+window.onload = function () {
+    engine.init("GLCanvas");
 
-        // create the game object
-        let myGame = new MyGame();
+    let myGame = new MyGame();
 
-        // first call of the game loop
-        loop.start(myGame);
+    // new begins the game 
+    loop.start(myGame);
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example 3.3: The Transform Objects Project </title>
-        <link rel ="icon" type ="image/x-icon" href="/favicon.ico">
+        <title>MP4: Game Loop and System Load (Ryan's Attempt)</title>
+        <link rel ="icon" type ="image/x-icon" href="./favicon.ico">
 
         <!-- the following says there are javascript source code contained in 
              the external source files
@@ -12,6 +12,7 @@
 
         <!-- our game -->
         <script type="module" src="./src/my_game/my_game.js"></script>
+
     </head>
 
      <body>    
@@ -20,12 +21,10 @@
             Your browser does not support the HTML5 canvas.
             <!-- this message will show only if WebGL clearing failed -->
         </canvas>
-
-        
-        <canvas id="Sec" width="640" height="480">
-            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
-            Your browser does not support the HTML5 canvas.
-            <!-- this message will show only if WebGL clearing failed -->
-        </canvas>
+        <br>
+        <hr>
+        <div id='LoadStat'></div>
+        <hr>
+        <div id='FrameStat'></div>
     </body>
 </html>

@@ -4,7 +4,9 @@
 import Renderable from "./renderable.js";
 import Transform from "./transform.js";
 import Camera from "./camera.js";
+import Cursor from "./cursor.js";
 import * as input from "./input.js";
+import * as LoadUtil from "./load_util.js";
 
 // local to this file only
 import * as glSys from "./core/gl.js";
@@ -27,10 +29,10 @@ function clearCanvas(color) {
 
 export default {
   // input support
-  input,
+  input, LoadUtil,
 
   // utility classes
-  Camera, Transform, Renderable,
+  Camera, Transform, Renderable, Cursor,
 
 
   // functions
