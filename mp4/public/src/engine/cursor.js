@@ -84,6 +84,7 @@ class Cursor {
     setCursorRange(range) {
         // update range with user supplied range
         this.cursorRange = range;
+        console.log("range: " + this.cursorRange + '\n');
 
         // if the range changes we need to update how we draw our bound shaders
         // clear the old transform
