@@ -1,4 +1,5 @@
 "use strict"
+import * as input from "../input.js";
 
 // how many updates in a sec?
 const kUPS = 60;
@@ -38,8 +39,9 @@ function loopOnce() {
     // if our lag time is greater than 1000 Milliseconds
     // our game is running behind. If that is true loop till caught up
     while((mLagTime >= kMPF) && mLoopRunning) {
-      mCurrentScene.update();
-      mLagTime -= kMPF;
+        input.update();
+        mCurrentScene.update();
+        mLagTime -= kMPF;
     }
   }
 }

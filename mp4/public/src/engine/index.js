@@ -4,6 +4,7 @@
 import Renderable from "./renderable.js";
 import Transform from "./transform.js";
 import Camera from "./camera.js";
+import * as input from "./input.js";
 
 // local to this file only
 import * as glSys from "./core/gl.js";
@@ -15,6 +16,7 @@ function init(htmlCanvasID) {
   glSys.init(htmlCanvasID);
   vertexBuffer.init();
   shaderResource.init();
+  input.init();
 }
 
 function clearCanvas(color) {
@@ -24,6 +26,9 @@ function clearCanvas(color) {
 }
 
 export default {
+  // input support
+  input,
+
   // utility classes
   Camera, Transform, Renderable,
 

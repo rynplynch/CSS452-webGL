@@ -58,33 +58,32 @@ class MyGame {
 
         // What changes in every loop of our game?
         update() {
-                // this describes the position of our white/red square
+                // For this very simple game, let's move the white square and pulse the red
+
                 let whiteXform = this.mWhiteSq.getXform();
-                let redXform = this.mRedSq.getXform();
-                // how much does the square move every loop?
                 let deltaX = 0.05;
 
-                // rotate the white square
-                // if the x position is greater than the bounds of the world
-                if (whiteXform.getXPos() > 30) {
-                        // set the position back to the left side of the viewport
-                        whiteXform.setPosition(10, 60);
+                // Step A: test for white square movement
+                if (engine.input.isKeyPressed(engine.input.keys.Right)) {
+                        if (whiteXform.getXPos() > 30) { // this is the right-bound of the window
+                                whiteXform.setPosition(10, 60);
+                        }
+                        whiteXform.incXPosBy(deltaX);
                 }
 
-                // move the x position of the square
-                whiteXform.incXPosBy(deltaX);
-                // rotate the white square
-                whiteXform.incRotationByDegree(1);
-
-                // check the width of the red square
-                // should it reach this size
-                if (redXform.getWidth() > 5) {
-                        // reset the size
-                        redXform.setSize(2, 2);
+                // Step  B: test for white square rotation
+                if (engine.input.isKeyClicked(engine.input.keys.Up)) {
+                        whiteXform.incRotationByDegree(10);
                 }
 
-                // scale the red square
-                redXform.incSizeBy(deltaX);
+                let redXform = this.mRedSq.getXform();
+                // Step  C: test for pulsing the red square
+                if (engine.input.isKeyPressed(engine.input.keys.Down)) {
+                        if (redXform.getWidth() > 5) {
+                                redXform.setSize(2, 2);
+                        }
+                        redXform.incSizeBy(0.05);
+                }
         }
 }
 
