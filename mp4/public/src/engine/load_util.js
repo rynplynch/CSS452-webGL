@@ -48,9 +48,6 @@ function numObjects() { return createdObjects; }
  * @param {float} loadSpread - Position for the objects: at +- loadSpread/2
  */
 function createLoadAt(at, objSize, numPerLoad, loadSpread) {
-    // increment created objects
-    createdObjects += numPerLoad;
-
     // the load is represented by an array
     let load = []
 
@@ -61,8 +58,14 @@ function createLoadAt(at, objSize, numPerLoad, loadSpread) {
     let xLower = at[0] - loadSpread/2;
     let yLower = at[1] - loadSpread/2;
 
+    // number of objects create is a random number + numPerLoad
+    // random is a number between -numPerLoad/2 and numPerLoad/2
+    let randPerLoad = Math.floor(Math.random() * (((numPerLoad/2)+1) - (-numPerLoad/2)) ) - (numPerLoad/2);
+    randPerLoad = numPerLoad + randPerLoad;
+    // increment created objects
+    createdObjects += randPerLoad;
     // each loop creates a new renderable object
-    for ( let i=0; i < numPerLoad; i++) {
+    for ( let i=0; i < randPerLoad; i++) {
         let render = new Renderable();
 
         // generate a random number for x and y position
