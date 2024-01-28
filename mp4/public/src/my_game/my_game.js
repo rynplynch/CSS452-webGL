@@ -59,7 +59,7 @@ class MyGame {
         this.mCamera.setViewAndCameraMatrix();
 
         // Step  C: Draw all objects
-        // engine.LoadUtil.drawLoads(this.mCamera);
+        engine.LoadUtil.drawLoads(this.mCamera);
         this.mCursor.drawCursor(this.mCamera);
     }
 
