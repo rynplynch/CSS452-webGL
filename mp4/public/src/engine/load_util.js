@@ -101,11 +101,16 @@ function createLoadAt(at, objSize, numPerLoad, loadSpread) {
  * @export LoadUtil
  */
 function removeLastLoad() {
-    // pop the last load
-    let load = loadStack.pop();
+    // check to make sure load array has a load to delete
+    if (loadStack.length != 0) {
+        // pop the last load
+        let load = loadStack.pop();
 
-    // update the number of objects render
-    createdObjects -= load.length;
+        // update the number of objects render
+        createdObjects -= load.length;
+        return;
+    }
+    console.log("No loads to delete");
 }
 
 /**
