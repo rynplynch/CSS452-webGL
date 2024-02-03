@@ -1,0 +1,141 @@
+{
+    "_comment": "reference: http://www.json.org/",
+    "_comment": "example JSON files: http://json.org/example.html",
+    "_comment": "simple parsing example: http://www.w3schools.com/json/json_http.asp",
+    
+    "Camera": {
+        "Center": [20, 60],
+        "Width": 20,
+        "Viewport": [20, 40, 600, 300],
+        "BgColor": [0.8, 0.8, 0.8, 1.0]
+    },
+    
+    "Square": [  
+        {   "_comment": "next four are the corners",
+            "Pos": [10, 65],
+            "Width": 1,
+            "Height": 1,
+            "Rotation": 45,
+            "Color": [1, 1, 0, 1]
+        },
+        {
+            "Pos": [30, 65],
+            "Width": 1,
+            "Height": 1,
+            "Rotation": 0,
+            "Color": [1, 0, 1, 1]
+        },
+        {
+            "Pos": [10, 55],
+            "Width": 1,
+            "Height": 1,
+            "Rotation": 0,
+            "Color": [0, 0, 1, 1]
+        },
+        {
+            "Pos": [30, 55],
+            "Width": 1,
+            "Height": 1,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+        {   "_comment": "following are random ones in the area",
+            "Pos": [13, 57],
+            "Width": 2,
+            "Height": 1,
+            "Rotation": 45,
+            "Color": [1, 0.3, 0.3, 1]
+        },
+        {   
+            "Pos": [12, 60],
+            "Width": 3,
+            "Height": 2,
+            "Rotation": 10,
+            "Color": [0.2, 1, 0.3, 1]
+        },
+        {   
+            "Pos": [14, 62],
+            "Width": 1,
+            "Height": 3,
+            "Rotation": -10,
+            "Color": [0.2, 0.1, 1, 1]
+        },
+        {   
+            "Pos": [18, 62],
+            "Width": 1.5,
+            "Height": 2,
+            "Rotation": 25,
+            "Color": [0.8, 1, 0.7, 1]
+        },
+        {   
+            "Pos": [17, 58],
+            "Width": 2.5,
+            "Height": 1,
+            "Rotation": -25,
+            "Color": [0.8, 0, 0.7, 1]
+        },
+        {   
+            "Pos": [19, 56],
+            "Width": 1.5,
+            "Height": 2,
+            "Rotation": 25,
+            "Color": [0.8, 1, 0.7, 1]
+        },
+        {
+            "Pos": [23, 57],
+            "Width": 2,
+            "Height": 1,
+            "Rotation": 45,
+            "Color": [1, 0.3, 0.3, 1]
+        },
+        {   
+            "Pos": [22, 60],
+            "Width": 3,
+            "Height": 2,
+            "Rotation": 10,
+            "Color": [0.2, 1, 0.3, 1]
+        },
+        {   
+            "Pos": [24, 62],
+            "Width": 1,
+            "Height": 3,
+            "Rotation": -10,
+            "Color": [0.2, 0.1, 1, 1]
+        },
+        {   
+            "Pos": [28, 62],
+            "Width": 1.5,
+            "Height": 2,
+            "Rotation": 25,
+            "Color": [0.8, 1, 0.7, 1]
+        },
+        {   
+            "Pos": [27, 58],
+            "Width": 2.5,
+            "Height": 1,
+            "Rotation": -25,
+            "Color": [0.8, 0, 0.7, 1]
+        },
+        {   
+            "Pos": [29, 56],
+            "Width": 1.5,
+            "Height": 2,
+            "Rotation": 25,
+            "Color": [0.8, 1, 0.7, 1]
+        },
+        {   "_comment": "last second square spins in the middle",
+            "Pos": [20, 60],
+            "Width": 2,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [1, 0, 0, 1]
+        },
+        {   "_comment": "last square travels across the screen",
+            "Pos": [20, 60],
+            "Width": 5,
+            "Height": 10,
+            "Rotation": 30,
+            "Color": [1, 1, 1, 1]
+        }
+    ]
+}

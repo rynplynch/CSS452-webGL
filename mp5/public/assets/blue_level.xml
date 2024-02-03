@@ -1,20 +1,43 @@
 <MyGameLevel>
 
-<!--  *** be careful!! comma (,) is not a supported syntax!!  -->
+<!--  *** be careful!! comma () is not a supported syntax!!  -->
 <!--  make sure there are no comma in between attributes -->
-<!--  e.g., do NOT do:  PosX="20", PosY="30" -->
+<!--  e.g. do NOT do:  PosX="20" PosY="30" -->
 <!--  notice the "comma" between PosX and PosY: Syntax error! -->
   
     <!-- cameras -->
-                <!-- Viewport: x, y, w, h -->
+        <!-- Viewport: x y w h -->
     <Camera CenterX="20" CenterY="60" Width="20" 
-          Viewport="20 40 600 300"   
-          BgColor="0 0 1 1.0"
-          />
+          Viewport="20 40 600 300"
+          BgColor="0.3 0.3 1.0 1.0"
+   />
               
               
     <!-- Squares Rotation is in degree -->
-    <Square PosX="20" PosY="60" Width="5" Height="5" Rotation="30" Color="1 1 1 1" />
+    <!-- these are the corner four squares-->
+    <Square PosX="10" PosY="65" Width="1" Height="1" Rotation="45"  Color="1 1 0 1" /> 
+    <Square PosX="30" PosY="65" Width="1" Height="1" Rotation="0"  Color="1 0 1 1" /> 
+    <Square PosX="10" PosY="55" Width="1" Height="1" Rotation="0"  Color="0 1 0 1" /> 
+    <Square PosX="30" PosY="55" Width="1" Height="1" Rotation="0"  Color="0 0 0 1" /> 
+
+    <!-- following are random ones in the area -->
+    <Square PosX="13" PosY="57" Width="2"   Height="1" Rotation="45"  Color="1 0.3 0.3 1" />
+    <Square PosX="12" PosY="60" Width="3"   Height="2" Rotation="10"  Color="0.2 1 0.3 1" />
+    <Square PosX="14" PosY="62" Width="1"   Height="3" Rotation="-10" Color="0.2 0.1 1 1" />
+    <Square PosX="18" PosY="62" Width="1.5" Height="2" Rotation="25"  Color="0.8 1 0.7 1" />
+    <Square PosX="17" PosY="58" Width="2.5" Height="1" Rotation="-25" Color="0.8 0 0.7 1" />
+    <Square PosX="19" PosY="56" Width="1.5" Height="2" Rotation="25"  Color="0.8 1 0.7 1" />
+    <Square PosX="23" PosY="57" Width="2"   Height="1" Rotation="45"  Color="1 0.3 0.3 1" />
+    <Square PosX="22" PosY="60" Width="3"   Height="2" Rotation="10"  Color="0.2 1 0.3 1" />
+    <Square PosX="24" PosY="62" Width="1"   Height="3" Rotation="-10" Color="0.2 0.1 1 1" />
+    <Square PosX="28" PosY="62" Width="1.5" Height="2" Rotation="25"  Color="0.8 1 0.7 1" />
+    <Square PosX="27" PosY="58" Width="2.5" Height="1" Rotation="-25" Color="0.8 0 0.7 1" />
+    <Square PosX="29" PosY="56" Width="1.5" Height="2" Rotation="25"  Color="0.8 1 0.7 1" />
+
+    <!-- second to last  stays in the middle and spins  -->
     <Square PosX="20" PosY="60" Width="2" Height="3" Rotation="0"  Color="1 0 0 1" />
-   
+
+        <!-- last travels across the screen  -->
+    <Square PosX="20" PosY="60" Width="5" Height="5" Rotation="30" Color="1 1 1 1" />
+
 </MyGameLevel>
