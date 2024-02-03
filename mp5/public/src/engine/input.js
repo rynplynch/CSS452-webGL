@@ -1,3 +1,11 @@
+/*
+ * File: input.js
+ *  
+ * interfaces with HTML5 to to receive keyboard events
+ * 
+ * For a complete list of key codes, see
+ * https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+ */
 "use strict";
 
 // Key code constants
@@ -11,7 +19,7 @@ const keys = {
     // space bar
     Space: 32,
 
-    // numbers
+    // numbers 
     Zero: 48,
     One: 49,
     Two: 50,
@@ -33,10 +41,6 @@ const keys = {
     J : 74,
     K : 75,
     L : 76,
-    M : 77,
-    N : 78,
-    O : 79,
-    P : 80,
     Q : 81,
     R : 82,
     S : 83,
@@ -45,48 +49,46 @@ const keys = {
     LastKeyCode: 222
 }
 
-// each of these arrays hold boolean values
-// previous state of key
-let mKeyPreviousState = [];
-// keys that are pressed
-let mIsKeyPressed = [];
-// click events
-// when an event is set, it remains till pulled?
-let mIsKeyClicked = [];
+// Previous key state
+let mKeyPreviousState = []; // a new array
+// The pressed keys.
+let  mIsKeyPressed = [];
+// Click events: once an event is set, it will remain there until polled
+let  mIsKeyClicked = [];
 
-// event handler
-// track if a key is pressed down
+// Event handler functions
 function onKeyDown(event) {
     mIsKeyPressed[event.keyCode] = true;
 }
 
-// track if a key is released
 function onKeyUp(event) {
     mIsKeyPressed[event.keyCode] = false;
 }
 
+function cleanUp() {}  // nothing to do for now
+
 function init() {
     let i;
-    // keys is a property provided by js
     for (i = 0; i < keys.LastKeyCode; i++) {
         mIsKeyPressed[i] = false;
         mKeyPreviousState[i] = false;
-        mIsKeyClicked[i] = false
+        mIsKeyClicked[i] = false;
     }
-    // register our event handler functions with the browser
+
+    // register handlers 
     window.addEventListener('keyup', onKeyUp);
     window.addEventListener('keydown', onKeyDown);
 }
 
 function update() {
     let i;
-    for (i =0; i < keys.LastKeyCode; i++) {
+    for (i = 0; i < keys.LastKeyCode; i++) {
         mIsKeyClicked[i] = (!mKeyPreviousState[i]) && mIsKeyPressed[i];
         mKeyPreviousState[i] = mIsKeyPressed[i];
     }
 }
 
-// public function exported from api
+// Function for GameEngine programmer to test if a key is pressed down
 function isKeyPressed(keyCode) {
     return mIsKeyPressed[keyCode];
 }
@@ -95,10 +97,7 @@ function isKeyClicked(keyCode) {
     return mIsKeyClicked[keyCode];
 }
 
-export {
-    keys,
-    init,
-    update,
+export {keys, init, cleanUp,
+    update, 
     isKeyClicked,
-    isKeyPressed
-}
+    isKeyPressed}

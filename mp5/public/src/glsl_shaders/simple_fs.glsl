@@ -1,9 +1,13 @@
-precision mediump float;
+// this is the fragment (or pixel) shader that 
+// outputs constant red color for every pixel rendered.
 
-// hold color of the pixel
-uniform vec4 uPixelColor;
+precision mediump float; 
+    // sets the precision for floating point computation
+
+// Color of pixel
+uniform vec4 uPixelColor;  
 
 void main(void) {
-    // for every pixel called set to the user defined color
+    // for every pixel called sets to the user specified color
     gl_FragColor = uPixelColor;
 }

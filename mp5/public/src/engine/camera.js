@@ -1,12 +1,17 @@
+/*
+ * File: camera.js
+ *
+ * Encapsulates the user define WC and Viewport functionality
+ */
+"use strict";
+
 import * as glSys from "./core/gl.js";
 
-// freeze takes in an object and returns an object
-// the returned object can not be altered in any way
 const eViewport = Object.freeze({
-eOrgX: 0,
-eOrgY: 1,
-eWidth: 2,
-eHeight: 3
+    eOrgX: 0,
+    eOrgY: 1,
+    eWidth: 2,
+    eHeight: 3
 });
 
 class Camera {
@@ -18,7 +23,7 @@ class Camera {
     //      [0] [1]: (x,y) position of lower left corner on the canvas (in pixel)
     //      [2]: width of viewport
     //      [3]: height of viewport
-    //
+    //      
     //  wcHeight = wcWidth * viewport[3]/viewport[2]
     //
     constructor(wcCenter, wcWidth, viewportArray) {
@@ -46,7 +51,7 @@ class Camera {
         // viewportH/viewportW
         let ratio = this.mViewport[eViewport.eHeight] / this.mViewport[eViewport.eWidth];
         return this.getWCWidth() * ratio;
-    }
+    }  
 
     setViewport(viewportArray) { this.mViewport = viewportArray; }
     getViewport() { return this.mViewport; }
@@ -56,7 +61,7 @@ class Camera {
     // #endregion
 
     // #region Compute and access camera transform matrix
-
+    
     // call before you start drawing with this camera
     setViewAndCameraMatrix() {
         let gl = glSys.get();
@@ -70,7 +75,7 @@ class Camera {
             this.mViewport[1], // y position of bottom-left corner of the area to be drawn
             this.mViewport[2], // width of the area to be drawn
             this.mViewport[3]);// height of the area to be drawn
-
+        
             // Step A3: set the color to be clear
         gl.clearColor(this.mBGColor[0], this.mBGColor[1], this.mBGColor[2], this.mBGColor[3]);  // set the color to be cleared
         // Step A4: enable the scissor area, clear, and then disable the scissor area
@@ -80,7 +85,7 @@ class Camera {
 
         // Step B: Compute the Camera Matrix
         let center = this.getWCCenter();
-
+        
         // Step B1: following the translation, scale to: (-1, -1) to (1, 1): a 2x2 square at origin
         mat4.scale(this.mCameraMatrix, mat4.create(), vec3.fromValues(2.0 / this.getWCWidth(), 2.0 / this.getWCHeight(), 1.0));
 
@@ -92,7 +97,7 @@ class Camera {
     getCameraMatrix() {
         return this.mCameraMatrix;
     }
-    // #endregion}
-
+    // #endregion
 }
+
 export default Camera;

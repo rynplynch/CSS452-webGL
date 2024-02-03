@@ -21,7 +21,7 @@ class MyGame {
 
         // System load specifics
         this.mObjectSize = 2;
-        this.mNumPerLoad = 20;
+        this.mNumPerLoad = 1000;
         this.mLoadSpread = 15;
 
         // UI Update time
@@ -34,7 +34,7 @@ class MyGame {
         this.mCamera = new engine.Camera(
             vec2.fromValues(50, 37.5),   // position of the camera
             100,                        // width of camera
-            [0, 0, 640, 480]         // viewport (orgX, orgY, width, height)
+            [0, 0, 1920, 1080]         // viewport (orgX, orgY, width, height)
         );
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray

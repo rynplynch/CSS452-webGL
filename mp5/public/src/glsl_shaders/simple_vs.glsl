@@ -1,25 +1,14 @@
-// this is the vertex shader
-// Expects one vertex position
-// naming convention, attributes always begin with "a"
+//
+// This is the vertex shader 
+attribute vec3 aVertexPosition;  // Vertex shader expects one vertex position
 
-// vector that describes the position of each vertex
-// (x, y ,z)
-attribute vec3 aVertexPosition;
-
-// 4x4 matrix that allows for transform out of Model Space
-// moves vertices into WC space
+// to transform the vertex position
 uniform mat4 uModelXformMatrix;
-
-// 4x4 matrix used in the camera transform
-// this takes our WC(World Coordinates) and
-// returns Normalized Device Coordinates
 uniform mat4 uCameraXformMatrix;
 
 void main(void) {
-    // gl_Position:
-    // the clip-space output position of the current vertex.
-    gl_Position =
-        uCameraXformMatrix *
-        uModelXformMatrix *
-        vec4(aVertexPosition, 1.0);
+    // Convert the vec3 into vec4 for scan conversion and
+    // transform by uModelXformMatrix and uCameraXformMatrix before
+    // assign to gl_Position to pass the vertex to the fragment shader
+    gl_Position = uCameraXformMatrix * uModelXformMatrix * vec4(aVertexPosition, 1.0); 
 }

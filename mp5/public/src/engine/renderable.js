@@ -1,3 +1,9 @@
+/*
+ * File: renderable.js
+ *
+ * Encapsulate the Shader and vertexBuffer into the same object (and will include
+ * other attributes later) to represent a Renderable object on the game screen.
+ */
 "use strict";
 
 import * as glSys from "./core/gl.js";
@@ -5,51 +11,22 @@ import * as shaderResources from "./core/shader_resources.js";
 import Transform from "./transform.js";
 
 class Renderable {
-  constructor(hasShadow) {
-    this.hasShadow = hasShadow;
-    this.mShadowShader = shaderResources.getConstShadowShader();
-    this.mShader = shaderResources.getConstColorShader();
-    this.mColor = [1, 1, 1, 1];
-    this.mShadowColor = [0.0, 0.0, 0.0, 1];
-    this.mShadowOffset = [.05, .05];
-    this.mXform = new Transform();
-
-    // saves a reference to the user created camera
-    this.mCameraRef = null;
-  }
-  // function used to render object
-  draw(camera) {
-    let gl = glSys.get();
-
-
-    if(this.hasShadow){
-      // activate our shadow shader
-      this.mShadowShader.activate(this.mShadowColor,
-                                  this.mXform.getTRSMatrix(),
-                                  camera.getCameraMatrix());
-
-      // set shadow offset
-      this.mShadowShader.setShadowOffset(this.mShadowOffset);
-
-      // draw the shadow
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
+    constructor() {
+        this.mShader = shaderResources.getConstColorShader();   // the shader for shading this object
+        this.mColor = [1, 1, 1, 1];     // color of pixel
+        this.mXform = new Transform();  // the transform object 
     }
 
-    // activate our shader
-    this.mShader.activate(this.mColor,
-                          this.mXform.getTRSMatrix(),
-                          camera.getCameraMatrix());
-    // tell webGL to draw
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  }
+    draw(camera) {
+        let gl = glSys.get();
+        this.mShader.activate(this.mColor, this.mXform.getTRSMatrix(), camera.getCameraMatrix());
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
 
-  setColor(color) { this.mColor = color; }
-  setShadowColor(color) { this.mShadowColor = color; }
-  setShadowOffset(shadowOffset) { this.mShadowOffset = shadowOffset };
-  getColor() { return this.mColor; }
-  getXform() { return this.mXform; }
+    getXform() { return this.mXform; }
+    
+    setColor(color) { this.mColor = color; }
+    getColor() { return this.mColor; }
 }
-
 
 export default Renderable;

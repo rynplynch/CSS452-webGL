@@ -1,38 +1,43 @@
+/*
+ * File: vertex_buffer.js
+ *  
+ * defines the module that supports the loading and using of the buffer that 
+ * contains vertex positions of a square onto the gl context
+ * 
+ */
 "use strict";
+
 import * as glSys from "./gl.js";
 
-// the location in memory where the WebGL buffer resides
+// reference to the vertex positions for the square in the gl context
 let mGLVertexBuffer = null;
-
-// return the pointer to the WebGL buffer
 function get() { return mGLVertexBuffer; }
+function cleanUp() { 
+    if (mGLVertexBuffer !== null) {
+        glSys.get().deleteBuffer(mGLVertexBuffer);
+        mGLVertexBuffer = null;   
+    }
+}
 
-// each row describes the vertex of a square
-// a each vertex has an x,y and z variable
-// there are 4 rows because a square has 4 corners
+// First: define the vertices for a square
 let mVerticesOfSquare = [
-  0.5, 0.5, 0.0,
-  -0.5, 0.5, 0.0,
-  0.5, -0.5, 0.0,
-  -0.5, -0.5, 0.0
+    0.5, 0.5, 0.0,
+    -0.5, 0.5, 0.0,
+    0.5, -0.5, 0.0,
+    -0.5, -0.5, 0.0
 ];
 
 function init() {
-  let mGL = glSys.get();
+    let  gl = glSys.get();
 
-  // use the function createBuffer that is provided by webGL
-  // this makes mGLVertexBuffer point to a webGL buffer
-  mGLVertexBuffer = mGL.createBuffer();
+    // Step A: Create a buffer on the gl context for our vertex positions
+    mGLVertexBuffer = gl.createBuffer();
+       
+    // Step B: Activate vertexBuffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, mGLVertexBuffer);
 
-  // activate newly created buffer
-  mGL.bindBuffer(mGL.ARRAY_BUFFER, mGLVertexBuffer);
-
-  // take the vertices of a square, as defined above
-  // load the matrix into the buffer
-  mGL.bufferData(mGL.ARRAY_BUFFER,
-                new Float32Array(mVerticesOfSquare),
-                 mGL.STATIC_DRAW
-                );
+    // Step C: Loads mVerticesOfSquare into the vertexBuffer
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mVerticesOfSquare), gl.STATIC_DRAW);
 }
 
-export {init, get};
+export {init, get, cleanUp}
