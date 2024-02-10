@@ -14,6 +14,7 @@ import { gBlueLevelData } from "./blue_level.js";
 class RedLevel extends MyGame {
     constructor() {
         super();
+        this.kXMLSceneFile = "assets/blue_level.xml";
     }
 
     nextLevelInstance() {
@@ -25,7 +26,16 @@ class RedLevel extends MyGame {
         //
         // initialize the scene with the retrieve data
         //
-        
+        this.mCamera = storedData.mCamera;
+        this.mSmallCamera = storedData.mSmallCamera;
+        this.mHeroRotateSpeed = storedData.mHeroRotateSpeed;
+        this.mSupportMoveSpeed = storedData.mSupportMoveSpeed;
+        this.mAllSq = storedData.mAllSq;
+        this.mHero = storedData.mHero;
+        this.mSupport = storedData.mSupport;
+        this.mSizeChangeRate = storedData.mSizeChangeRate;
+        this.kUpdatePeriod = storedData.kUpdatePeriod;
+
         engine.storage.remove(gBlueLevelData);  // remove the data
 
         // sets up the proper background color to differentiate which level

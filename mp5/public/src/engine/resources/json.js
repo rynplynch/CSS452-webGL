@@ -11,14 +11,15 @@ let unload = map.unload;
 let has = map.has;
 let get = map.get;
 
-let mParser = new DOMParser();
+let mParser = JSON;
 
 function decodeJSON(data) {
-    return data.text();
+  return data.text()
 }
 
 function parseJSON(text) {
-    return mParser.parseFromString(text, "text/xml");
+  // use the parser to create a json object
+  return JSON.parse(text)
 }
 
 function load(path) {

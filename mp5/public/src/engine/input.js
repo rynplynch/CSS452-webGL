@@ -19,6 +19,9 @@ const keys = {
     // space bar
     Space: 32,
 
+    // shift key
+    Shift: 16,
+
     // numbers 
     Zero: 48,
     One: 49,
@@ -33,18 +36,31 @@ const keys = {
 
     // Alphabets
     A : 65,
+    B : 66,
+    C : 67,
     D : 68,
     E : 69,
     F : 70,
     G : 71,
+    H : 72,
     I : 73,
     J : 74,
     K : 75,
     L : 76,
+    M : 77,
+    N : 78,
+    O : 79,
+    P : 80,
     Q : 81,
     R : 82,
     S : 83,
+    T : 84,
+    U : 85,
+    V : 86,
     W : 87,
+    X : 88,
+    Y : 89,
+    Z : 90,
 
     LastKeyCode: 222
 }
@@ -55,6 +71,8 @@ let mKeyPreviousState = []; // a new array
 let  mIsKeyPressed = [];
 // Click events: once an event is set, it will remain there until polled
 let  mIsKeyClicked = [];
+// if changes when a key goes from being clicked to not being clicked
+let mIsKeyReleased = [];
 
 // Event handler functions
 function onKeyDown(event) {
@@ -73,6 +91,7 @@ function init() {
         mIsKeyPressed[i] = false;
         mKeyPreviousState[i] = false;
         mIsKeyClicked[i] = false;
+        mIsKeyReleased[i] = false;
     }
 
     // register handlers 
@@ -84,6 +103,7 @@ function update() {
     let i;
     for (i = 0; i < keys.LastKeyCode; i++) {
         mIsKeyClicked[i] = (!mKeyPreviousState[i]) && mIsKeyPressed[i];
+        mIsKeyReleased[i] = (mKeyPreviousState[i]) && !mIsKeyPressed[i];
         mKeyPreviousState[i] = mIsKeyPressed[i];
     }
 }
@@ -97,7 +117,12 @@ function isKeyClicked(keyCode) {
     return mIsKeyClicked[keyCode];
 }
 
-export {keys, init, cleanUp,
-    update, 
-    isKeyClicked,
-    isKeyPressed}
+function isKeyReleased(keyCode) { return mIsKeyReleased[keyCode] }
+
+export {keys,
+        init,
+        cleanUp,
+        update,
+        isKeyClicked,
+        isKeyReleased,
+        isKeyPressed}

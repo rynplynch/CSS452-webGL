@@ -59,6 +59,13 @@ function loadDecodeParse(path, decodeResource, parseResource) {
         fetchPromise =  fetch(path)
             .then(res => decodeResource(res) )
             .then(data => parseResource(data) )
+            // .then( res => {
+            //     console.log("After parse")
+            //     if(typeof res === 'object'){
+            //         console.log(res.Camera.Center)
+            //     }
+            //     return res
+            // } )
             .then(data => { return set(path, data) } )
             .catch(err => { throw err });
         pushPromise(fetchPromise);

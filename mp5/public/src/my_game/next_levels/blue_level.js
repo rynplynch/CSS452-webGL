@@ -31,6 +31,7 @@ class BlueLevel extends MyGame {
     }
 
     next() {
+
         engine.storage.set(gBlueLevelData, this);
         super.next();
     }

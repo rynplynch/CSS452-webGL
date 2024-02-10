@@ -93,6 +93,59 @@ class Camera {
         mat4.translate(this.mCameraMatrix, this.mCameraMatrix, vec3.fromValues(-center[0], -center[1], 0));
     }
 
+    moveWCCenter(xPos, yPos) {
+        // grab current position
+        let currPos = this.getWCCenter();
+
+        // add xPos and yPos to current position
+        let newPos = [ xPos + currPos[0], yPos + currPos[1]];
+
+        // change world center
+        this.setWCCenter(newPos[0], newPos[1])
+    }
+    incWCWidth(widthDelta) {
+        // grab current world width
+        let currWidth = this.getWCWidth();
+
+        // add with user given delta
+        let newWidth = widthDelta + currWidth;
+
+
+        //change the camera property
+        this.setWCWidth(newWidth);
+
+
+    }
+    moveViewport(widthDelta, heightDelta) {
+        // grab viewports current state
+        let currState = this.getViewport();
+
+        // viewportArray: [x, y, width, height]
+        // add delta x and y to current position
+        let newPos = [widthDelta + currState[0], heightDelta + currState[1]];
+
+        this.setViewport([ newPos[0], newPos[1], currState[2], currState[3] ]);
+    }
+    incViewportWidth(widthDelta) {
+        // grab viewports current state
+        let currState = this.getViewport();
+
+        // viewportArray: [x, y, width, height]
+        // add delta width to current width
+        let newWidth = widthDelta + currState[2];
+
+        this.setViewport([ currState[0], currState[1], newWidth, currState[3] ]);
+    }
+    incViewportHeight(heightDelta) {
+        // grab viewports current state
+        let currState = this.getViewport();
+
+        // viewportArray: [x, y, width, height]
+        // add delta height to current height
+        let newHeight = heightDelta + currState[3];
+
+        this.setViewport([ currState[0], currState[1], currState[2], newHeight ]);
+    }
     // Getter for the View-Projection transform operator
     getCameraMatrix() {
         return this.mCameraMatrix;

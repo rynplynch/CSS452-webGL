@@ -26,6 +26,7 @@ import Renderable from "./renderable.js";
 import * as glSys from "./core/gl.js";
 import * as vertexBuffer from "./core/vertex_buffer.js";
 import * as shaderResources from "./core/shader_resources.js";
+import * as storage from "./storage.js"
 import * as loop from "./core/loop.js";
 
 // general engine utilities
@@ -55,7 +56,7 @@ function clearCanvas(color) {
 
 export default {
     // resource support
-    audio, text, xml, json,
+    audio, text, xml, json, storage,
 
     // input support
     input,

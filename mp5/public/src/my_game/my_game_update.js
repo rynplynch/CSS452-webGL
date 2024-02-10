@@ -32,7 +32,7 @@ MyGame.prototype.update = function () {
     // rotate the hero object at proper speed
     let xf = this.mHero.getXform();
     xf.incRotationByDegree(this.mHeroRotateSpeed);
-    
+
     if (engine.input.isKeyPressed(engine.input.keys.Shift)) {
         cameraManip(this.mSmallCamera);
         cameraViewportManip(this.mSmallCamera);

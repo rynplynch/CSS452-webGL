@@ -3,7 +3,7 @@
 import engine from "../../engine/index.js";
 
 let kViewportDelta = 10;
-let kWCDelta = 0.1;
+let kWCDelta = 1;
 
 // WASD: to move the WCCenter of the camera
 // XZ: to increase/decrease WC Width
@@ -27,14 +27,14 @@ export function cameraManip(camera) {
 // JLIK: to move the viewport of the camera
 // ArrowKeys: to increase/decrease Viewport Width/Height
 export function cameraViewportManip(camera) {
-     // User viewport control
+    // User viewport control
     if (engine.input.isKeyReleased(engine.input.keys.J)) 
-         camera.moveViewport(-kViewportDelta, 0);
-     if (engine.input.isKeyClicked(engine.input.keys.L))
+        camera.moveViewport(-kViewportDelta, 0);
+    if (engine.input.isKeyClicked(engine.input.keys.L))
         camera.moveViewport(kViewportDelta, 0);
-     if (engine.input.isKeyPressed(engine.input.keys.I))
+    if (engine.input.isKeyPressed(engine.input.keys.I))
         camera.moveViewport(0, kViewportDelta);
-     if (engine.input.isKeyPressed(engine.input.keys.K))
+    if (engine.input.isKeyPressed(engine.input.keys.K))
         camera.moveViewport(0, -kViewportDelta);
 
     if (engine.input.isKeyPressed(engine.input.keys.Left))

@@ -22,7 +22,7 @@ MyGame.prototype.nextLevelInstance = function() {
 // 
 MyGame.prototype.next = function() {      
     engine.Scene.prototype.next.call(this);  // this is calling Scene.next()
-    
+
     // storage into resource_map
     engine.storage.set(gSharedCameraName, this.mSmallCamera);
 

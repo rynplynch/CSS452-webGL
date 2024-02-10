@@ -55,11 +55,11 @@ async function start(scene) {
     }
     mCurrentScene = scene;
     mCurrentScene.load();
-    
+
     // Wait for any async requests before game-load
     await map.waitOnPromises();
-    
-    mCurrentScene.init();    
+
+    mCurrentScene.init();
     mPrevTime = performance.now();
     mLagTime = 0.0;
     mLoopRunning = true;
