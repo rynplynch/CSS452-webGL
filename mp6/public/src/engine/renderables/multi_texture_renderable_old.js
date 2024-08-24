@@ -6,7 +6,7 @@
  */
 "use strict";
 
-import TextureRenderable from "./texture_renderable.js";
+import SpriteRenderable from "./sprite_renderable.js";
 import * as glSys from "../core/gl.js";
 import * as texture from "../resources/texture.js";
 import * as shaderResources from "../core/shader_resources.js";
@@ -27,15 +27,10 @@ const eEffectTexCoordArrayIndex = Object.freeze({
 });
 
 // extend SpriteRenderable, background texture uses sprite variables
-class MultiTextureRenderable extends TextureRenderable {
+class MultiTextureRenderable extends SpriteRenderable {
   constructor(textureOne, textureTwo) {
-    super(textureOne);
-    // sprite coordinate
-    this.mElmLeft = 0.0;   // bounds of texture coordinate (0 is left, 1 is right)
-    this.mElmRight = 1.0;  //
-    this.mElmTop = 1.0;    //   1 is top and 0 is bottom of image
-    this.mElmBottom = 0.0; //
     // calls to the texture class
+    super(textureOne);
     // gets our special shader that can handle two textures
     super._setShader(shaderResources.getMultiTexShader());
     // background coordinate
@@ -48,8 +43,6 @@ class MultiTextureRenderable extends TextureRenderable {
     // default to override draw mode
     this.mDrawMode = 0;
 
-    this.mMainTex = textureOne
-
     // texture that we manipulate
     this.mEffectTex = textureTwo;
 
@@ -58,48 +51,28 @@ class MultiTextureRenderable extends TextureRenderable {
 
     // transform for the effect texture
     this.mEffectXForm = new Transform();
-
-
-
-
-
   }
 
     draw(camera) {
-      // this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
-      // texture.activate(this.mMainTex);
-      // if( this.mEffectTex != null ){
-      //   texture.activateEffect(this.mEffectTex)
-      //   this.mShader.setEffectTextureCoordinate(this.getEffectUVCoordinateArray());
-      // }
-      // super.draw(camera);
-
-      // texture.activate(this.mEffectTex);
-      // super.draw(camera);
-
       let gl = glSys.get();
-      // this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
+      // we must set the coordinates for our effect texture and background texture
+      this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
+      this.mShader.setEffectTextureCoordinate(this.getEffectUVCoordinateArray());
 
-      let xPos = this.mXform.getXPos();
-      let yPos = this.mXform.getYPos();
-      this.mEffectXForm.setXPos(xPos);
-      this.mEffectXForm.setYPos(yPos);
-      texture.activate(this.mMainTex);
-      this.mShader.activate(this.mColor, this.mXform.getTRSMatrix(), camera.getCameraMatrix());
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       texture.activate(this.mEffectTex);
-      this.mShader.activate(this.mEffectColor, this.mEffectXForm.getTRSMatrix(), camera.getCameraMatrix());
+      // texture.activate(this.mTexture);
+      this.mShader.activate(this.mColor, this.mXform.getTRSMatrix(), this.mEffectColor, this.mEffectXForm.getTRSMatrix(), camera.getCameraMatrix());  // always activate the shader first!
+      // this.mShader.activate(
+      //   // everything related to the background texture
+      //   this.mColor, this.mXform.getTRSMatrix(),
+      //   // everything related to the effect texture
+      //   this.mEffectColor, this.mEffectXForm.getTRSMatrix(),
+      //   // the camera matrix
+      //   camera.getCameraMatrix());  // always activate the shader first!
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
     }
 
-  getElementUVCoordinateArray() {
-    return [
-      this.mElmRight,  this.mElmTop,          // x,y of top-right
-      this.mElmLeft,   this.mElmTop,
-      this.mElmRight,  this.mElmBottom,
-      this.mElmLeft,   this.mElmBottom
-    ];
-  }
   getEffectUVCoordinateArray() {
     return [
       this.mEffectRight,  this.mEffectTop,          // x,y of top-right
@@ -142,17 +115,6 @@ class MultiTextureRenderable extends TextureRenderable {
   // set the effect draw flag
   setEffectMode(int){
     this.mDrawMode = int;
-  }
-  setElementPixelPositions(left, right, bottom, top) {
-    let texInfo = texture.get(this.mTexture);
-    // entire image width, height
-    let imageW = texInfo.mWidth;
-    let imageH = texInfo.mHeight;
-
-    this.mElmLeft = left / imageW;
-    this.mElmRight = right / imageW;
-    this.mElmBottom = bottom / imageH;
-    this.mElmTop = top / imageH;
   }
 }
 

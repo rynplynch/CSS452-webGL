@@ -26,8 +26,20 @@ let mVerticesOfSquare = [
 let mGLTextureCoordBuffer = null;
 function getTexCoord() { return mGLTextureCoordBuffer; }
 
+
+// reference to the texture coordinates for the square vertices in the gl context
+let mGLEffectTextureCoordBuffer = null;
+function getEffectTexCoord() { return mGLEffectTextureCoordBuffer; }
+
 // Second: define the corresponding texture coordinates
 let mTextureCoordinates = [
+    1.0, 1.0,
+    0.0, 1.0,
+    1.0, 0.0,
+    0.0, 0.0
+];
+
+let mEffectTextureCoordinates = [
     1.0, 1.0,
     0.0, 1.0,
     1.0, 0.0,
@@ -44,6 +56,11 @@ function cleanUp() {
     if (mGLTextureCoordBuffer !== null) {
         gl.deleteBuffer(mGLTextureCoordBuffer);
         mGLTextureCoordBuffer = null;
+    }
+
+    if (mGLEffectTextureCoordBuffer !== null) {
+        gl.deleteBuffer(mGLEffectTextureCoordBuffer);
+        mGLEffectTextureCoordBuffer = null;
     }
 }
 
@@ -67,9 +84,16 @@ function init() {
     gl.bindBuffer(gl.ARRAY_BUFFER, mGLTextureCoordBuffer);
 
     // Loads textureCoordinates into the mGLTextureCoordBuffer
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mTextureCoordinates), gl.STATIC_DRAW);   
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mTextureCoordinates), gl.STATIC_DRAW);
+
+    mGLEffectTextureCoordBuffer = gl.createBuffer();
+
+    // Activate texture coordinate buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, mGLEffectTextureCoordBuffer);
+
+    // Loads textureCoordinates into the mGLTextureCoordBuffer
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mEffectTextureCoordinates), gl.STATIC_DRAW);
 }
 
 export {init, cleanUp, 
-        get, getTexCoord}
-
+        get, getTexCoord, getEffectTexCoord}

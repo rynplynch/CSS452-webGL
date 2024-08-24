@@ -6,6 +6,7 @@ precision mediump float;
 // The object that fetches data from texture.
 // Must be set outside the shader.
 uniform sampler2D uSampler;
+uniform sampler2D uEffectSampler;
 
 // Color of pixel
 uniform vec4 uPixelColor;  
@@ -14,6 +15,7 @@ uniform vec4 uPixelColor;
 // interpolated and thus varies. 
 varying vec2 vTexCoord;
 
+varying vec2 vEffectTexCoord;
 void main(void)  {
     // texel color look up based on interpolated UV value in vTexCoord
     vec4 c = texture2D(uSampler, vec2(vTexCoord.s, vTexCoord.t));

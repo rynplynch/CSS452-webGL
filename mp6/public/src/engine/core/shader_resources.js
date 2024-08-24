@@ -21,6 +21,11 @@ let mConstColorShader = null;
 // Texture Shader
 let kTextureVS = "src/glsl_shaders/texture_vs.glsl";  // Path to the VertexShader 
 let kTextureFS = "src/glsl_shaders/texture_fs.glsl";  // Path to the texture FragmentShader
+
+// multi texture shader
+let kMultiTextVS = "src/glsl_shaders/multi_texture_vs.glsl";
+let kMultiTextFS = "src/glsl_shaders/multi_texture_fs.glsl";
+
 let mTextureShader = null;
 let mSpriteShader = null;
 let mMultiTexShader = null;
@@ -29,7 +34,7 @@ function createShaders() {
     mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
     mTextureShader = new TextureShader(kTextureVS, kTextureFS);
     mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
-    mMultiTexShader = new MultiTextShader(kTextureVS, kTextureFS);
+    mMultiTexShader = new MultiTextShader(kMultiTextVS, kMultiTextFS);
 }
 
 function cleanUp() {
@@ -51,7 +56,9 @@ function init() {
                 text.load(kSimpleFS),
                 text.load(kSimpleVS),
                 text.load(kTextureFS),
-                text.load(kTextureVS)
+                text.load(kTextureVS),
+                text.load(kMultiTextFS),
+                text.load(kMultiTextVS)
             ]);
             resolve();
         }).then(

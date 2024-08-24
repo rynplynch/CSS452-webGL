@@ -107,6 +107,26 @@ function activate(textureName) {
     // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 }
 
+function activateEffect(textureName) {
+    let gl = glSys.get();
+    let texInfo = get(textureName);
+
+    // Binds our texture reference to the current webGL texture functionality
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
+
+    // To prevent texture wrappings
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    // Handles how magnification and minimization filters will work.
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+    // For pixel-graphics where you want the texture to look "sharp" do the following:
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+}
 function deactivate() {
     let gl = glSys.get();
     gl.bindTexture(gl.TEXTURE_2D, null);
@@ -118,4 +138,4 @@ export {
 
     TextureInfo,    
 
-    activate, deactivate}
+    activate, deactivate, activateEffect}

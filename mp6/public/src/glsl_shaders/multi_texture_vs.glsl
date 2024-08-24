@@ -4,9 +4,13 @@
 //
 attribute vec3 aVertexPosition;      // Vertex shader expects one vertex position
 attribute vec2 aTextureCoordinate;   // This is the texture coordinate attribute
+attribute vec2 aEffectTextureCoordinate;   // This is the effect texture coordinate attribute
 
 // texture coordinate that maps image to the square
 varying vec2 vTexCoord;
+
+// coordinates that map effect texture to square
+varying vec2 vEffectTexCoord;
 
 // to transform the vertex position
 uniform mat4 uModelXformMatrix;
@@ -20,4 +24,7 @@ void main(void) {
     
     // pass the texture coordinate to the fragment shader
     vTexCoord = aTextureCoordinate;
+
+    // pass the effect texture coordinate to the fragment shader
+    vEffectTexCoord = aEffectTextureCoordinate;
 }
